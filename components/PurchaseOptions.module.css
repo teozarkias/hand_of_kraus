@@ -1,0 +1,96 @@
+.sizeRow {
+  margin-top: 2.2rem;
+}
+
+.sizeLabel {
+  display: block;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  margin-bottom: 0.7rem;
+}
+
+.sizeOptions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem;
+}
+
+.sizeBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  padding: 0.8rem 1rem;
+  background: none;
+  border: 1px solid var(--hair);
+  color: var(--fg);
+  text-align: left;
+  transition:
+    border-color 0.25s ease,
+    background 0.25s ease;
+}
+
+.sizeBtn:hover {
+  border-color: var(--fg-dim);
+}
+
+.sizeBtnActive {
+  border-color: var(--fg);
+  background: var(--bg-dim);
+}
+
+.sizeName {
+  font-family: var(--font-fraunces), serif;
+  font-style: italic;
+  font-size: 1rem;
+}
+
+.sizeDims {
+  font-size: 0.72rem;
+  color: var(--fg-dim);
+}
+
+.priceRow {
+  margin-top: 1.8rem;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.price {
+  font-family: var(--font-fraunces), serif;
+  font-size: 1.9rem;
+  color: var(--fg);
+}
+
+.cur {
+  font-size: 1rem;
+  color: var(--fg-dim);
+  margin-right: 0.3rem;
+}
+
+.addCart {
+  margin-top: 1rem;
+  width: 100%;
+  padding: 1rem;
+  background: none;
+  border: 1px solid var(--fg);
+  color: var(--fg);
+  font-family: var(--font-jost);
+  font-size: 0.82rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+}
+
+.addCart:hover {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+.added {
+  background: var(--fg);
+  color: var(--bg);
+}

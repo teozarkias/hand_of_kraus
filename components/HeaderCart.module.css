@@ -1,0 +1,19 @@
+.cartBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid var(--fg);
+  padding: 0.55rem 1rem;
+  background: none;
+  color: var(--fg);
+  font-family: var(--font-jost);
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.cartBtn:hover {
+  background: var(--fg);
+  color: var(--bg);
+}

@@ -1,0 +1,104 @@
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.topBar {
+  padding: 2rem 4vw 0;
+}
+
+.back {
+  display: inline-block;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+}
+
+.back:hover {
+  color: var(--fg);
+}
+
+.intro {
+  padding: 2rem 4vw 1rem;
+  max-width: 640px;
+}
+
+.eyebrow {
+  font-size: 0.75rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.intro h1 {
+  font-family: var(--font-fraunces), serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+  line-height: 1.3;
+}
+
+.intro p {
+  margin-top: 1rem;
+  color: var(--fg-dim);
+  line-height: 1.7;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.2rem;
+  padding: 2rem 4vw 6rem;
+}
+
+.piece {
+  opacity: 0;
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.imgWrap {
+  position: relative;
+  aspect-ratio: 3 / 5;
+  overflow: hidden;
+  background: var(--bg-dim);
+}
+
+.image {
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.16, 0.8, 0.24, 1);
+  transform: scale(1);
+}
+
+.piece:hover .image {
+  transform: scale(1.06);
+}
+
+.pieceTitle {
+  margin-top: 0.6rem;
+  font-family: var(--font-fraunces), serif;
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--fg);
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

@@ -1,0 +1,66 @@
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.topBar {
+  padding: 2rem 4vw 0;
+  opacity: 0;
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+.back {
+  display: inline-block;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+}
+
+.back:hover {
+  color: var(--fg);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.8rem;
+  padding: 1.5rem 4vw 6rem;
+}
+
+.piece {
+  display: block;
+  opacity: 0;
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.imgWrap {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: var(--bg-dim);
+}
+
+.image {
+  object-fit: cover;
+}
+
+.pieceTitle {
+  margin-top: 0.7rem;
+  font-family: var(--font-fraunces), serif;
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--fg);
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
