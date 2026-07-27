@@ -67,13 +67,14 @@
 
 .imgWrap {
   position: relative;
-  aspect-ratio: 3 / 5;
   overflow: hidden;
   background: var(--bg-dim);
 }
 
 .image {
-  object-fit: cover;
+  display: block;
+  width: 100%;
+  height: auto;
   transition: transform 0.6s cubic-bezier(0.16, 0.8, 0.24, 1);
   transform: scale(1);
 }

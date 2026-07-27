@@ -22,7 +22,9 @@ export default function CartPage() {
       if (!product) return null;
 
       const price =
-        item.kind === "print" ? getPrintSize(item.size!).price : product.price;
+        item.kind === "print" || item.kind === "tarot"
+          ? getPrintSize(item.size!).price
+          : product.price;
 
       const href =
         item.kind === "original"
@@ -36,7 +38,7 @@ export default function CartPage() {
           ? `Original · ${"medium" in product ? product.medium : ""}`
           : item.kind === "print"
             ? `Print · ${getPrintSize(item.size!).label}`
-            : "Tarot card";
+            : `Tarot card · ${getPrintSize(item.size!).label}`;
 
       return { index, product, price, href, meta };
     })

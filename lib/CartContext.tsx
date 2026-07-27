@@ -9,7 +9,7 @@ import type { PrintSizeId } from "./pricing";
 export interface CartItem {
   paintingId: string;
   kind: "original" | "print" | "tarot";
-  size?: PrintSizeId; // only set when kind === "print"
+  size?: PrintSizeId; // set when kind === "print" or "tarot"
 }
 
 interface CartContextValue {

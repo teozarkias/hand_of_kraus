@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import PurchaseOptions from "@/components/PurchaseOptions";
+import ZoomableImage from "@/components/ZoomableImage";
 import styles from "./ProductDetail.module.css";
 
 // Works for both a full Painting and a lighter TarotCard — only id, title,
@@ -43,13 +43,7 @@ export default function ProductDetail({
 
       <div className={styles.detailGrid}>
         <div className={styles.detailImg}>
-          <Image
-            src={painting.image}
-            alt={painting.title}
-            width={480}
-            height={640}
-            className={styles.image}
-          />
+          <ZoomableImage src={painting.image} alt={painting.title} />
         </div>
 
         <div className={styles.info}>

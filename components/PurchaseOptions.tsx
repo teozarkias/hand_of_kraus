@@ -19,14 +19,15 @@ export default function PurchaseOptions({
   const [added, setAdded] = useState(false);
 
   const selectedSize = PRINT_SIZES.find((s) => s.id === sizeId)!;
-  const price = kind === "print" ? selectedSize.price : originalPrice;
+  const showSizeChoice = kind === "print" || kind === "tarot";
+  const price = showSizeChoice ? selectedSize.price : originalPrice;
 
   function handleAdd() {
-    if (kind === "print") {
-      addItem({ paintingId, kind: "print", size: sizeId });
+    if (showSizeChoice) {
+      addItem({ paintingId, kind, size: sizeId });
     } else {
-      // "original" and "tarot" are both single fixed-price items — a
-      // one-of-one painting or a single tarot card, neither has a size choice.
+      // "original" is a single fixed-price item — a one-of-one painting,
+      // no size choice.
       addItem({ paintingId, kind });
     }
     setAdded(true);
@@ -35,9 +36,9 @@ export default function PurchaseOptions({
 
   return (
     <div>
-      {/* Size choice only applies to prints — an original is one physical
-          object, so there's nothing to choose a size of. */}
-      {kind === "print" && (
+      {/* Size choice applies to prints and tarot cards — an original is one
+          physical object, so there's nothing to choose a size of. */}
+      {showSizeChoice && (
         <div className={styles.sizeRow}>
           <span className={styles.sizeLabel}>Size</span>
           <div className={styles.sizeOptions}>

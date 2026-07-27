@@ -29,8 +29,8 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.8rem;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.4rem;
   padding: 1.5rem 4vw 6rem;
 }
 
@@ -42,13 +42,14 @@
 
 .imgWrap {
   position: relative;
-  aspect-ratio: 3 / 4;
   overflow: hidden;
   background: var(--bg-dim);
 }
 
 .image {
-  object-fit: cover;
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .pieceTitle {
@@ -59,8 +60,22 @@
   color: var(--fg);
 }
 
+@media (max-width: 1200px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
 @media (max-width: 900px) {
   .grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
   }
 }

@@ -14,9 +14,9 @@ const DEFAULT_PRICE = 35;
 // full 78-card deck is still being finished.
 export const tarotCards: TarotCard[] = [
   {
-    id: "the-lovers",
-    title: "The Lovers",
-    image: "/tarot/LOVERS1.jpg",
+    id: "the-lovers-iii",
+    title: "The Lovers III",
+    image: "/tarot/The_Lovers.jpg",
     price: DEFAULT_PRICE,
   },
   {
@@ -26,21 +26,15 @@ export const tarotCards: TarotCard[] = [
     price: DEFAULT_PRICE,
   },
   {
-    id: "the-lovers-iii",
-    title: "The Lovers III",
-    image: "/tarot/The_Lovers.jpg",
-    price: DEFAULT_PRICE,
-  },
-  {
     id: "the-lovers-iv",
     title: "The Lovers IV",
     image: "/tarot/The_Lovers2.jpg",
     price: DEFAULT_PRICE,
   },
   {
-    id: "the-magician",
-    title: "The Magician",
-    image: "/tarot/The_Magician.jpg",
+    id: "the-lovers",
+    title: "The Lovers",
+    image: "/tarot/LOVERS1.jpg",
     price: DEFAULT_PRICE,
   },
   {
@@ -56,15 +50,21 @@ export const tarotCards: TarotCard[] = [
     price: DEFAULT_PRICE,
   },
   {
+    id: "the-magician",
+    title: "The Magician",
+    image: "/tarot/The_Magician.jpg",
+    price: DEFAULT_PRICE,
+  },
+  {
     id: "the-magician-iv",
     title: "The Magician IV",
     image: "/tarot/The_Magician4.jpg",
     price: DEFAULT_PRICE,
   },
   {
-    id: "the-sun",
-    title: "The Sun",
-    image: "/tarot/THE_SUN_1.jpg",
+    id: "the-sun-iv",
+    title: "The Sun IV",
+    image: "/tarot/The_Sun2.jpg",
     price: DEFAULT_PRICE,
   },
   {
@@ -80,15 +80,9 @@ export const tarotCards: TarotCard[] = [
     price: DEFAULT_PRICE,
   },
   {
-    id: "the-sun-iv",
-    title: "The Sun IV",
-    image: "/tarot/The_Sun2.jpg",
-    price: DEFAULT_PRICE,
-  },
-  {
-    id: "the-tower",
-    title: "The Tower",
-    image: "/tarot/The_Tower.jpg",
+    id: "the-sun",
+    title: "The Sun",
+    image: "/tarot/THE_SUN_1.jpg",
     price: DEFAULT_PRICE,
   },
   {
@@ -104,15 +98,15 @@ export const tarotCards: TarotCard[] = [
     price: DEFAULT_PRICE,
   },
   {
-    id: "the-tower-iv",
-    title: "The Tower IV",
-    image: "/tarot/TOWER2.jpg",
+    id: "the-tower",
+    title: "The Tower",
+    image: "/tarot/The_Tower.jpg",
     price: DEFAULT_PRICE,
   },
   {
-    id: "tarot-animals",
-    title: "Tarot Animals",
-    image: "/tarot/Tarot_Animals.jpg",
+    id: "the-tower-iv",
+    title: "The Tower IV",
+    image: "/tarot/TOWER2.jpg",
     price: DEFAULT_PRICE,
   },
 ];

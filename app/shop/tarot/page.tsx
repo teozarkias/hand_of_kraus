@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { getAllTarotCards } from "@/lib/tarot";
 import styles from "./page.module.css";
 
@@ -16,9 +15,9 @@ export default function TarotShopPage() {
 
       <div className={styles.intro}>
         <span className={styles.eyebrow}>Tarot · in progress</span>
-        <h1>An original 78-card deck, drawn in the same hand.</h1>
+        <h1>An original 48-card deck of all the Major Arcana.</h1>
         <p>
-          The full deck isn&apos;t available yet, but finished cards can be
+          The full deck isn't available yet, but finished card prints can be
           bought individually below.
         </p>
       </div>
@@ -32,13 +31,8 @@ export default function TarotShopPage() {
             style={{ animationDelay: `${Math.min(index * 0.04, 0.4)}s` }}
           >
             <div className={styles.imgWrap}>
-              <Image
-                src={card.image}
-                alt=""
-                fill
-                sizes="(max-width: 600px) 50vw, (max-width: 1000px) 33vw, 20vw"
-                className={styles.image}
-              />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={card.image} alt="" className={styles.image} />
             </div>
             <div className={styles.pieceTitle}>{card.title}</div>
           </Link>
