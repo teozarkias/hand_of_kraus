@@ -1,0 +1,57 @@
+.cover {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.4rem;
+  transition: opacity 0.5s ease;
+}
+
+.coverHidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.mark {
+  font-family: var(--font-fraunces), serif;
+  font-style: italic;
+  font-size: 1.3rem;
+  color: var(--fg);
+  letter-spacing: 0.02em;
+}
+
+.bar {
+  width: 140px;
+  height: 1px;
+  background: var(--hair);
+  overflow: hidden;
+}
+
+.barFill {
+  width: 40%;
+  height: 100%;
+  background: var(--fg);
+  animation: sweep 1.1s ease-in-out infinite;
+}
+
+@keyframes sweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(350%);
+  }
+}
+
+.content {
+  opacity: 0;
+}
+
+.contentVisible {
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}

@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { paintings } from "@/lib/paintings";
+import PreloadGate from "@/components/PreloadGate";
 import styles from "./page.module.css";
 
 export default function PrintsShopPage() {
   return (
-    <>
+    <PreloadGate images={paintings.map((p) => p.image)}>
       <div className={styles.topBar}>
         <Link href="/shop" className={styles.back}>
           &larr; Shop
@@ -21,12 +22,18 @@ export default function PrintsShopPage() {
           >
             <div className={styles.imgWrap}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={painting.image} alt="" className={styles.image} />
+              <img
+                src={painting.image}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                className={styles.image}
+              />
             </div>
             <div className={styles.pieceTitle}>{painting.title}</div>
           </Link>
         ))}
       </section>
-    </>
+    </PreloadGate>
   );
 }
