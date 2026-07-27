@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getPaintingById, getAllPaintingIds } from "@/lib/paintings";
-import ProductDetail from "@/components/ProduceDetail";
+import ProductDetail from "@/components/ProductDetail";
+ProductDetail;
 
 export function generateStaticParams() {
   return getAllPaintingIds().map((id) => ({ id }));

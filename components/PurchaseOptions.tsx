@@ -11,7 +11,7 @@ export default function PurchaseOptions({
   originalPrice,
 }: {
   paintingId: string;
-  kind: "original" | "print";
+  kind: "original" | "print" | "tarot";
   originalPrice: number;
 }) {
   const { addItem } = useCart();
@@ -19,13 +19,15 @@ export default function PurchaseOptions({
   const [added, setAdded] = useState(false);
 
   const selectedSize = PRINT_SIZES.find((s) => s.id === sizeId)!;
-  const price = kind === "original" ? originalPrice : selectedSize.price;
+  const price = kind === "print" ? selectedSize.price : originalPrice;
 
   function handleAdd() {
-    if (kind === "original") {
-      addItem({ paintingId, kind: "original" });
-    } else {
+    if (kind === "print") {
       addItem({ paintingId, kind: "print", size: sizeId });
+    } else {
+      // "original" and "tarot" are both single fixed-price items — a
+      // one-of-one painting or a single tarot card, neither has a size choice.
+      addItem({ paintingId, kind });
     }
     setAdded(true);
     setTimeout(() => setAdded(false), 1400);

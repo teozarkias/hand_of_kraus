@@ -3,11 +3,12 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
 import { getPaintingById } from "./paintings";
+import { getTarotCardById } from "./tarot";
 import type { PrintSizeId } from "./pricing";
 
 export interface CartItem {
   paintingId: string;
-  kind: "original" | "print";
+  kind: "original" | "print" | "tarot";
   size?: PrintSizeId; // only set when kind === "print"
 }
 
@@ -44,7 +45,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
   );
 
   function addItem(item: CartItem) {
-    if (!getPaintingById(item.paintingId)) return;
+    const exists =
+      item.kind === "tarot"
+        ? getTarotCardById(item.paintingId)
+        : getPaintingById(item.paintingId);
+    if (!exists) return;
     setItems((prev) => [...prev, item]);
   }
 

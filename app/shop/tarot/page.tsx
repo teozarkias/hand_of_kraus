@@ -18,15 +18,16 @@ export default function TarotShopPage() {
         <span className={styles.eyebrow}>Tarot · in progress</span>
         <h1>An original 78-card deck, drawn in the same hand.</h1>
         <p>
-          The full deck isn&apos;t available yet — here&apos;s a preview of the
-          cards finished so far.
+          The full deck isn&apos;t available yet, but finished cards can be
+          bought individually below.
         </p>
       </div>
 
       <section className={styles.grid}>
         {cards.map((card, index) => (
-          <div
+          <Link
             key={card.id}
+            href={`/shop/tarot/${card.id}`}
             className={styles.piece}
             style={{ animationDelay: `${Math.min(index * 0.04, 0.4)}s` }}
           >
@@ -40,7 +41,7 @@ export default function TarotShopPage() {
               />
             </div>
             <div className={styles.pieceTitle}>{card.title}</div>
-          </div>
+          </Link>
         ))}
       </section>
     </>
