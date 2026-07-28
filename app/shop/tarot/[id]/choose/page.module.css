@@ -1,0 +1,100 @@
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page {
+  padding: 3rem 4vw 6rem;
+}
+
+.back {
+  display: inline-block;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  margin-bottom: 2.6rem;
+}
+
+.back:hover {
+  color: var(--fg);
+}
+
+.intro {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.eyebrow {
+  font-size: 0.75rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.intro h1 {
+  font-family: var(--font-fraunces), serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+}
+
+.options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3rem;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  opacity: 0;
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.option:nth-child(2) {
+  animation-delay: 0.12s;
+}
+
+.optionImg {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--bg-dim);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  transition: transform 0.4s cubic-bezier(0.16, 0.8, 0.24, 1);
+}
+
+.option:hover .optionImg {
+  transform: translateY(-6px);
+}
+
+.optionLabel {
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-dim);
+}
+
+.option:hover .optionLabel {
+  color: var(--fg);
+}
+
+@media (max-width: 600px) {
+  .options {
+    grid-template-columns: 1fr;
+    max-width: 320px;
+  }
+}

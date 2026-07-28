@@ -55,32 +55,22 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.2rem;
-  padding: 2rem 4vw 6rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4rem 3rem;
+  padding: 3rem 6vw 8rem;
 }
 
 .piece {
   opacity: 0;
-  animation: fadeInUp 0.6s ease forwards;
+  animation: fadeInUp 0.1s ease forwards;
 }
 
 .imgWrap {
   position: relative;
-  overflow: hidden;
-  background: var(--bg-dim);
-}
-
-.image {
-  display: block;
-  width: 100%;
-  height: auto;
-  transition: transform 0.6s cubic-bezier(0.16, 0.8, 0.24, 1);
-  transform: scale(1);
-}
-
-.piece:hover .image {
-  transform: scale(1.06);
+  overflow: visible;
+  padding: 1.5rem;
+  max-width: 75%;
+  margin: 0 auto;
 }
 
 .pieceTitle {

@@ -1,0 +1,55 @@
+.single {
+  position: relative;
+  background: var(--bg-dim);
+}
+
+.singleImg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.stack {
+  position: relative;
+}
+
+.front {
+  display: block;
+  width: 100%;
+  height: auto;
+  position: relative;
+  z-index: 2;
+  background: var(--bg-dim);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+  transition: transform 0.45s cubic-bezier(0.16, 0.8, 0.24, 1);
+}
+
+/* Hidden directly behind the front card until hovered — then fans out to
+   the side, rotated slightly, so both cards end up visible at once, like
+   drawing a second card out from behind the first rather than replacing it. */
+.back {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  background: var(--bg-dim);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+  opacity: 0;
+  transform: translate(0, 0) rotate(0deg);
+  transition:
+    transform 0.45s cubic-bezier(0.16, 0.8, 0.24, 1),
+    opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.stack:hover .front {
+  transform: translate(-8%, 2%) rotate(-4deg);
+}
+
+.stack:hover .back {
+  opacity: 1;
+  z-index: 3;
+  transform: translate(16%, -6%) rotate(5deg);
+}
