@@ -19,7 +19,6 @@ export default async function TarotChoosePage({
     notFound();
   }
 
-  // No second version to choose between — just go straight to the buy page.
   if (!card.previewImage) {
     redirect(`/shop/tarot/${card.id}`);
   }
@@ -36,18 +35,24 @@ export default async function TarotChoosePage({
       </div>
 
       <div className={styles.options}>
+        {/* Thumb versions here too — this is still a browsing/decision
+            screen, not the final zoom-focused buy page. */}
         <Link
           href={`/shop/tarot/${card.id}?variant=preview`}
           className={styles.option}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={card.previewImage} alt="" className={styles.optionImg} />
+          <img
+            src={card.previewImageThumb}
+            alt=""
+            className={styles.optionImg}
+          />
           <span className={styles.optionLabel}>Sketch</span>
         </Link>
 
         <Link href={`/shop/tarot/${card.id}`} className={styles.option}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={card.image} alt="" className={styles.optionImg} />
+          <img src={card.imageThumb} alt="" className={styles.optionImg} />
           <span className={styles.optionLabel}>Framed Card</span>
         </Link>
       </div>

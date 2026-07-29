@@ -6,8 +6,12 @@ import styles from "./page.module.css";
 
 export default function TarotShopPage() {
   const cards = getAllTarotCards();
+
+  // Only the small thumb versions get preloaded here — the full-quality
+  // files are only fetched once someone actually opens a specific card's
+  // buy page, where the extra detail is worth the extra weight.
   const preloadImages = cards.flatMap((c) =>
-    c.previewImage ? [c.previewImage, c.image] : [c.image],
+    c.previewImageThumb ? [c.previewImageThumb, c.imageThumb] : [c.imageThumb],
   );
 
   return (
@@ -20,9 +24,9 @@ export default function TarotShopPage() {
 
       <div className={styles.intro}>
         <span className={styles.eyebrow}>Tarot · in progress</span>
-        <h1>An original 48-card deck of all the Major Arcana.</h1>
+        <h1>An original 78-card deck, drawn in the same hand.</h1>
         <p>
-          The full deck isn't available yet, but finished card prints can be
+          The full deck isn&apos;t available yet, but finished cards can be
           bought individually below.
         </p>
       </div>
@@ -41,8 +45,8 @@ export default function TarotShopPage() {
           >
             <div className={styles.imgWrap}>
               <TarotCardStack
-                previewSrc={card.previewImage ?? card.image}
-                finalSrc={card.previewImage ? card.image : undefined}
+                previewSrc={card.imageThumb}
+                finalSrc={card.previewImageThumb}
                 alt=""
               />
             </div>

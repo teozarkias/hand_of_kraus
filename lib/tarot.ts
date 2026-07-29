@@ -1,83 +1,72 @@
 export interface TarotCard {
   id: string;
   title: string;
-  image: string; // the finished, framed card — also what's sold on the product page
-  previewImage?: string; // raw preview sketch, shown by default in the gallery; hover reveals `image`
   price: number;
+
+  // Full-quality versions — used on the actual buy page, where the zoom
+  // feature needs real detail to be worth anything.
+  image: string;
+  previewImage?: string;
+
+  // Optimized/small versions — used only in the gallery grid and its
+  // hover-reveal, where speed matters more than maximum resolution.
+  imageThumb: string;
+  previewImageThumb?: string;
 }
 
-// Flat default price for a single tarot card. Adjust per-card below if some
-// should cost differently later.
 const DEFAULT_PRICE = 35;
 
+// Builds both the full-quality and thumbnail paths for a card from a
+// single filename, so each pair only needs to be listed once below.
+function makeCard(
+  id: string,
+  title: string,
+  framedFilename: string,
+  sketchFilename?: string,
+): TarotCard {
+  return {
+    id,
+    title,
+    price: DEFAULT_PRICE,
+    image: `/tarot/${framedFilename}`,
+    imageThumb: `/tarot-thumbs/${framedFilename}`,
+    previewImage: sketchFilename ? `/tarot/${sketchFilename}` : undefined,
+    previewImageThumb: sketchFilename
+      ? `/tarot-thumbs/${sketchFilename}`
+      : undefined,
+  };
+}
+
 export const tarotCards: TarotCard[] = [
-  // Lovers — confirmed from screenshot: two distinct finished designs,
-  // each with a raw preview + the framed card.
-  {
-    id: "the-lovers",
-    title: "The Lovers",
-    previewImage: "/tarot/The_Lovers.jpg",
-    image: "/tarot/LOVERS2.jpg",
-    price: DEFAULT_PRICE,
-  },
-  {
-    id: "the-lovers-ii",
-    title: "The Lovers?",
-    previewImage: "/tarot/The_Lovers2.jpg",
-    image: "/tarot/LOVERS1.jpg",
-    price: DEFAULT_PRICE,
-  },
+  // Lovers — confirmed pairing from the artist's screenshot.
+  makeCard("the-lovers", "The Lovers", "LOVERS2.jpg", "The_Lovers.jpg"),
+  makeCard("the-lovers-ii", "The Lovers II", "LOVERS1.jpg", "The_Lovers2.jpg"),
 
-  // Magician — grouped by title, but no all-caps filename exists for this
-  // one to signal which file is the raw sketch vs. the framed card, so
-  // this pairing is a GUESS. If it's backwards, just swap previewImage
-  // and image on either entry below.
-  {
-    id: "the-magician",
-    title: "The Magician",
-    previewImage: "/tarot/The_Magician2.jpg",
-    image: "/tarot/The_Magician3.jpg",
-    price: DEFAULT_PRICE,
-  },
-  {
-    id: "the-magician-ii",
-    title: "The Magician?",
-    previewImage: "/tarot/The_Magician.jpg",
-    image: "/tarot/The_Magician4.jpg",
-    price: DEFAULT_PRICE,
-  },
+  // Magician — grouped by title, but no filename-casing signal exists to
+  // confirm which file is the sketch vs. the framed card. Best guess.
+  makeCard(
+    "the-magician",
+    "The Magician",
+    "The_Magician3.jpg",
+    "The_Magician2.jpg",
+  ),
+  makeCard(
+    "the-magician-ii",
+    "The Magician II",
+    "The_Magician4.jpg",
+    "The_Magician.jpg",
+  ),
 
-  // Sun — same casing pattern as Lovers (The_... = raw, ALL-CAPS = framed).
-  {
-    id: "the-sun",
-    title: "The Sun",
-    previewImage: "/tarot/The_Sun2.jpg",
-    image: "/tarot/THE_SUN_2.jpg",
-    price: DEFAULT_PRICE,
-  },
-  {
-    id: "the-sun-ii",
-    title: "The Sun?",
-    previewImage: "/tarot/The_Sun.jpg",
-    image: "/tarot/THE_SUN_1.jpg",
-    price: DEFAULT_PRICE,
-  },
+  // Sun — same casing pattern as Lovers.
+  makeCard("the-sun", "The Sun", "THE_SUN_2.jpg", "The_Sun2.jpg"),
+  makeCard("the-sun-ii", "The Sun II", "THE_SUN_1.jpg", "The_Sun.jpg"),
 
   // Tower — same casing pattern.
-  {
-    id: "the-tower",
-    title: "The Tower",
-    previewImage: "/tarot/The_Tower2.jpg",
-    image: "/tarot/TOWER1.jpg",
-    price: DEFAULT_PRICE,
-  },
-  {
-    id: "the-tower-ii",
-    title: "The Tower?",
-    previewImage: "/tarot/The_Tower.jpg",
-    image: "/tarot/TOWER2.jpg",
-    price: DEFAULT_PRICE,
-  },
+  makeCard("the-tower", "The Tower", "TOWER1.jpg", "The_Tower2.jpg"),
+  makeCard("the-tower-ii", "The Tower II", "TOWER2.jpg", "The_Tower.jpg"),
+
+  // No pairing — single standalone piece.
+  makeCard("tarot-animals", "Tarot Animals", "Tarot_Animals.jpg"),
 ];
 
 export function getAllTarotCards(): TarotCard[] {

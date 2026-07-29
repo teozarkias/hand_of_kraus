@@ -1,15 +1,32 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getFeaturedPaintings } from "@/lib/paintings";
+import { paintings, getFeaturedPaintings } from "@/lib/paintings";
+import { tarotCards } from "@/lib/tarot";
 import PreloadGate from "@/components/PreloadGate";
+import SitePreloader from "@/components/SitePreloader";
 import styles from "./page.module.css";
 
 export default function HomePage() {
   const featured = getFeaturedPaintings();
   const preloadImages = [...featured.map((p) => p.image), "/artist/artist.jpg"];
 
+  // Prefetched quietly in the background. Paintings only have one quality
+  // level, so their real image is used; tarot cards use their small thumb
+  // versions here — the full-quality tarot files are only ever fetched
+  // when someone actually opens a specific card's buy page.
+  const siteWideImages = [
+    ...paintings.map((p) => p.image),
+    ...tarotCards.flatMap((c) =>
+      c.previewImageThumb
+        ? [c.previewImageThumb, c.imageThumb]
+        : [c.imageThumb],
+    ),
+  ];
+
   return (
     <PreloadGate images={preloadImages}>
+      <SitePreloader images={siteWideImages} />
+
       <section className={styles.featured}>
         {featured.map((painting) => (
           <Link

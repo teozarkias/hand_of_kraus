@@ -19,7 +19,7 @@ const jost = Jost({
 });
 
 export const metadata: Metadata = {
-  title: "Nocturne — Original Ink Works",
+  title: "Kraus — Original Ink Works",
   description:
     "Original ink drawings — cliffs, tides, and things half-seen in the grain of the paper.",
 };
@@ -38,6 +38,7 @@ export default function RootLayout({
               Kraus
             </a>
             <nav className={styles.nav}>
+              <a href="/">Home</a>
               <a href="/works">Works</a>
               <a href="/shop">Shop</a>
             </nav>

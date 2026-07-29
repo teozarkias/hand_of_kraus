@@ -1,10 +1,16 @@
 import styles from "./TarotCardStack.module.css";
 
 // A tarot card that has both a raw preview sketch and a finished framed
-// version stacks them: the preview shows by default, and hovering slides
-// the finished card down from above to reveal it — like drawing the real
-// card out from behind the sketch. Cards with only one image (no pairing
-// confirmed yet) just render flat, no stacking.
+// version stacks them: the preview shows by default, and hovering fans
+// the finished card out from behind it. Cards with only one image just
+// render flat, no stacking.
+//
+// Both images render immediately (hover only reveals the back one, it
+// never mounts a new element on demand) — so there's no reason to lazy
+// load either one here. The page that uses this already preloads and
+// fully decodes both images ahead of time (see PreloadGate); loading
+// these eagerly too means the browser's own native image pipeline is
+// working with that decode-ahead effort instead of against it.
 export default function TarotCardStack({
   previewSrc,
   finalSrc,
@@ -21,7 +27,7 @@ export default function TarotCardStack({
         <img
           src={previewSrc}
           alt={alt}
-          loading="lazy"
+          loading="eager"
           decoding="async"
           className={styles.singleImg}
         />
@@ -35,7 +41,7 @@ export default function TarotCardStack({
       <img
         src={previewSrc}
         alt={alt}
-        loading="lazy"
+        loading="eager"
         decoding="async"
         className={styles.front}
       />
@@ -43,7 +49,7 @@ export default function TarotCardStack({
       <img
         src={finalSrc}
         alt=""
-        loading="lazy"
+        loading="eager"
         decoding="async"
         className={styles.back}
       />

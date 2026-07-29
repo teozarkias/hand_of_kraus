@@ -21,9 +21,8 @@ export default async function TarotProductPage({
     notFound();
   }
 
-  // Same underlying product page either way — just swap which image/title
-  // it shows depending on which of the two versions was picked on the
-  // "choose" screen.
+  // Always the full-quality image here — this is the page with the zoom
+  // feature, where the extra resolution actually matters.
   const isSketch = variant === "preview" && card.previewImage;
   const product = isSketch
     ? { ...card, title: `${card.title} — Sketch`, image: card.previewImage! }
