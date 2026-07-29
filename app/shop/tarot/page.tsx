@@ -24,9 +24,9 @@ export default function TarotShopPage() {
 
       <div className={styles.intro}>
         <span className={styles.eyebrow}>Tarot · in progress</span>
-        <h1>An original 78-card deck, drawn in the same hand.</h1>
+        <h1>An original 48-card deck of all the Major Arcana.</h1>
         <p>
-          The full deck isn&apos;t available yet, but finished cards can be
+          The full deck isn't available yet, but finished card prints can be
           bought individually below.
         </p>
       </div>
