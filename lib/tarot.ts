@@ -40,7 +40,7 @@ function makeCard(
 export const tarotCards: TarotCard[] = [
   // Lovers — confirmed pairing from the artist's screenshot.
   makeCard("the-lovers", "The Lovers", "LOVERS2.jpg", "The_Lovers.jpg"),
-  makeCard("the-lovers-ii", "The Lovers II", "LOVERS1.jpg", "The_Lovers2.jpg"),
+  makeCard("the-lovers-ii", "The Lovers?", "LOVERS1.jpg", "The_Lovers2.jpg"),
 
   // Magician — grouped by title, but no filename-casing signal exists to
   // confirm which file is the sketch vs. the framed card. Best guess.
@@ -52,21 +52,18 @@ export const tarotCards: TarotCard[] = [
   ),
   makeCard(
     "the-magician-ii",
-    "The Magician II",
+    "The Magician?",
     "The_Magician4.jpg",
     "The_Magician.jpg",
   ),
 
   // Sun — same casing pattern as Lovers.
   makeCard("the-sun", "The Sun", "THE_SUN_2.jpg", "The_Sun2.jpg"),
-  makeCard("the-sun-ii", "The Sun II", "THE_SUN_1.jpg", "The_Sun.jpg"),
+  makeCard("the-sun-ii", "The Sun?", "THE_SUN_1.jpg", "The_Sun.jpg"),
 
   // Tower — same casing pattern.
   makeCard("the-tower", "The Tower", "TOWER1.jpg", "The_Tower2.jpg"),
-  makeCard("the-tower-ii", "The Tower II", "TOWER2.jpg", "The_Tower.jpg"),
-
-  // No pairing — single standalone piece.
-  makeCard("tarot-animals", "Tarot Animals", "Tarot_Animals.jpg"),
+  makeCard("the-tower-ii", "The Tower?", "TOWER2.jpg", "The_Tower.jpg"),
 ];
 
 export function getAllTarotCards(): TarotCard[] {
