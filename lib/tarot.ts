@@ -45,25 +45,26 @@ export const tarotCards: TarotCard[] = [
   // Magician — grouped by title, but no filename-casing signal exists to
   // confirm which file is the sketch vs. the framed card. Best guess.
   makeCard(
-    "the-magician",
-    "The Magician",
-    "The_Magician3.jpg",
-    "The_Magician2.jpg",
-  ),
-  makeCard(
     "the-magician-ii",
-    "The Magician?",
+    "The Magician",
     "The_Magician4.jpg",
     "The_Magician.jpg",
   ),
 
+  makeCard(
+    "the-magician",
+    "The Magician?",
+    "The_Magician3.jpg",
+    "The_Magician2.jpg",
+  ),
+
   // Sun — same casing pattern as Lovers.
-  makeCard("the-sun", "The Sun", "THE_SUN_2.jpg", "The_Sun2.jpg"),
-  makeCard("the-sun-ii", "The Sun?", "THE_SUN_1.jpg", "The_Sun.jpg"),
+  makeCard("the-sun-ii", "The Sun", "THE_SUN_1.jpg", "The_Sun.jpg"),
+  makeCard("the-sun", "The Sun?", "THE_SUN_2.jpg", "The_Sun2.jpg"),
 
   // Tower — same casing pattern.
-  makeCard("the-tower", "The Tower", "TOWER1.jpg", "The_Tower2.jpg"),
-  makeCard("the-tower-ii", "The Tower?", "TOWER2.jpg", "The_Tower.jpg"),
+  makeCard("the-tower", "The Tower", "TOWER2.jpg", "The_Tower.jpg"),
+  makeCard("the-tower-ii", "The Tower?", "TOWER1.jpg", "The_Tower2.jpg"),
 ];
 
 export function getAllTarotCards(): TarotCard[] {
