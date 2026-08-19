@@ -67,7 +67,6 @@
 
 .thumbImg {
   object-fit: cover;
-  filter: grayscale(1) contrast(1.05);
 }
 
 .rowInfo {
@@ -81,7 +80,7 @@
 }
 
 .rowTitle:hover {
-  color: var(--fg);
+  color: var(--fg-dim);
 }
 
 .rowMeta {
@@ -138,6 +137,12 @@
   color: var(--fg);
 }
 
+.error {
+  color: #b3261e;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
 .checkout {
   width: 100%;
   padding: 1rem;
@@ -151,10 +156,14 @@
   transition: all 0.35s ease;
 }
 
-.checkout:hover {
+.checkout:hover:not(:disabled) {
   background: var(--fg);
-  border-color: var(--fg);
   color: var(--bg);
+}
+
+.checkout:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 @media (max-width: 600px) {

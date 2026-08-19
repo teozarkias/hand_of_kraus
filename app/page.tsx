@@ -10,10 +10,6 @@ export default function HomePage() {
   const featured = getFeaturedPaintings();
   const preloadImages = [...featured.map((p) => p.image), "/artist/artist.jpg"];
 
-  // Prefetched quietly in the background. Paintings only have one quality
-  // level, so their real image is used; tarot cards use their small thumb
-  // versions here — the full-quality tarot files are only ever fetched
-  // when someone actually opens a specific card's buy page.
   const siteWideImages = [
     ...paintings.map((p) => p.image),
     ...tarotCards.flatMap((c) =>
@@ -31,7 +27,14 @@ export default function HomePage() {
         {featured.map((painting) => (
           <Link
             key={painting.id}
-            href={`/shop/originals/${painting.id}`}
+            // A featured piece might not be sellable as an original (see
+            // originalForSale in lib/paintings.ts) — route those to
+            // Prints instead so the link is never dead.
+            href={
+              painting.originalForSale === false
+                ? `/shop/prints/${painting.id}`
+                : `/shop/originals/${painting.id}`
+            }
             className={styles.piece}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}

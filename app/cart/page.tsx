@@ -1,50 +1,45 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/lib/CartContext";
-import { getPaintingById } from "@/lib/paintings";
-import { getTarotCardById } from "@/lib/tarot";
-import { getPrintSize } from "@/lib/pricing";
+import { resolveCartItem } from "@/lib/cart-pricing";
 import styles from "./page.module.css";
 
 export default function CartPage() {
   const { items, removeItem } = useCart();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const rows = items
     .map((item, index) => {
-      // Originals/prints live in paintings.ts, tarot cards live in tarot.ts —
-      // look each up from the right place based on the item's kind.
-      const product =
-        item.kind === "tarot"
-          ? getTarotCardById(item.paintingId)
-          : getPaintingById(item.paintingId);
-      if (!product) return null;
-
-      const price =
-        item.kind === "print" || item.kind === "tarot"
-          ? getPrintSize(item.size!).price
-          : product.price;
-
-      const href =
-        item.kind === "original"
-          ? `/shop/originals/${product.id}`
-          : item.kind === "print"
-            ? `/shop/prints/${product.id}`
-            : `/shop/tarot/${product.id}`;
-
-      const meta =
-        item.kind === "original"
-          ? `Original · ${"medium" in product ? product.medium : ""}`
-          : item.kind === "print"
-            ? `Print · ${getPrintSize(item.size!).label}`
-            : `Tarot card · ${getPrintSize(item.size!).label}`;
-
-      return { index, product, price, href, meta };
+      const resolved = resolveCartItem(item);
+      return resolved ? { ...resolved, index } : null;
     })
     .filter((r): r is NonNullable<typeof r> => r !== null);
 
   const total = rows.reduce((sum, r) => sum + r.price, 0);
+
+  async function handleCheckout() {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error ?? "Checkout failed.");
+      }
+      window.location.href = data.url;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong.");
+      setLoading(false);
+    }
+  }
 
   if (rows.length === 0) {
     return (
@@ -69,11 +64,11 @@ export default function CartPage() {
 
       <div className={styles.list}>
         {rows.map((row) => (
-          <div className={styles.row} key={`${row.product.id}-${row.index}`}>
+          <div className={styles.row} key={`${row.id}-${row.index}`}>
             <div className={styles.thumb}>
               <Image
-                src={row.product.image}
-                alt={row.product.title}
+                src={row.image}
+                alt={row.title}
                 fill
                 sizes="120px"
                 className={styles.thumbImg}
@@ -81,7 +76,7 @@ export default function CartPage() {
             </div>
             <div className={styles.rowInfo}>
               <Link href={row.href} className={styles.rowTitle}>
-                {row.product.title}
+                {row.title}
               </Link>
               <div className={styles.rowMeta}>{row.meta}</div>
             </div>
@@ -92,7 +87,7 @@ export default function CartPage() {
             <button
               className={styles.remove}
               onClick={() => removeItem(row.index)}
-              aria-label={`Remove ${row.product.title} from cart`}
+              aria-label={`Remove ${row.title} from cart`}
             >
               Remove
             </button>
@@ -108,7 +103,15 @@ export default function CartPage() {
         </span>
       </div>
 
-      <button className={styles.checkout}>Checkout</button>
+      {error && <p className={styles.error}>{error}</p>}
+
+      <button
+        className={styles.checkout}
+        onClick={handleCheckout}
+        disabled={loading}
+      >
+        {loading ? "Redirecting…" : "Checkout"}
+      </button>
     </section>
   );
 }

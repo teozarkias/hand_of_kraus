@@ -1,9 +1,11 @@
 import Link from "next/link";
-import { paintings } from "@/lib/paintings";
+import { getOriginalsForSale } from "@/lib/paintings";
 import PreloadGate from "@/components/PreloadGate";
 import styles from "./page.module.css";
 
 export default function OriginalsShopPage() {
+  const paintings = getOriginalsForSale();
+
   return (
     <PreloadGate images={paintings.map((p) => p.image)}>
       <div className={styles.topBar}>

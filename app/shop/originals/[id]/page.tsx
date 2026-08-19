@@ -1,10 +1,9 @@
 import { notFound } from "next/navigation";
-import { getPaintingById, getAllPaintingIds } from "@/lib/paintings";
+import { getPaintingById, getOriginalsForSale } from "@/lib/paintings";
 import ProductDetail from "@/components/ProductDetail";
 
-
 export function generateStaticParams() {
-  return getAllPaintingIds().map((id) => ({ id }));
+  return getOriginalsForSale().map((p) => ({ id: p.id }));
 }
 
 export default async function OriginalProductPage({
@@ -15,7 +14,10 @@ export default async function OriginalProductPage({
   const { id } = await params;
   const painting = getPaintingById(id);
 
-  if (!painting) {
+  // Not found at all, or found but not sellable as an original — either
+  // way, this page shouldn't exist for it. It may still be reachable
+  // under /shop/prints/[id].
+  if (!painting || painting.originalForSale === false) {
     notFound();
   }
 

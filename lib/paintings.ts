@@ -8,6 +8,10 @@ export interface Painting {
   price: number;
   available: boolean;
   featured?: boolean;
+  // Some pieces can't be sold as the physical one-of-one original (the
+  // artist wants to keep them, license restrictions, etc.) but should
+  // still be sellable as prints. Defaults to true when omitted.
+  originalForSale?: boolean;
 }
 
 export const paintings: Painting[] = [
@@ -113,7 +117,6 @@ export const paintings: Painting[] = [
     price: 520,
     available: true,
   },
-
   {
     id: "grave-of-mensis",
     title: "Grave of Mensis",
@@ -124,6 +127,7 @@ export const paintings: Painting[] = [
     price: 710,
     available: true,
     featured: true,
+    originalForSale: false,
   },
   {
     id: "the_witch_of_Rothwood",
@@ -134,6 +138,7 @@ export const paintings: Painting[] = [
     year: "2025",
     price: 780,
     available: true,
+    originalForSale: false,
   },
   {
     id: "VESSELS",
@@ -154,6 +159,7 @@ export const paintings: Painting[] = [
     year: "2025",
     price: 780,
     available: true,
+    originalForSale: false,
   },
   {
     id: "i-shall-remain",
@@ -164,6 +170,7 @@ export const paintings: Painting[] = [
     year: "2025",
     price: 780,
     available: true,
+    originalForSale: false,
   },
 ];
 
@@ -177,4 +184,8 @@ export function getAllPaintingIds(): string[] {
 
 export function getFeaturedPaintings(): Painting[] {
   return paintings.filter((p) => p.featured);
+}
+
+export function getOriginalsForSale(): Painting[] {
+  return paintings.filter((p) => p.originalForSale !== false);
 }
