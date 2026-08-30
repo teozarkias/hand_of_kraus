@@ -5,10 +5,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/lib/CartContext";
 import { resolveCartItem } from "@/lib/cart-pricing";
+import { SHIPPING_ZONES, type ShippingZoneId } from "@/lib/shipping-zones";
 import styles from "./page.module.css";
 
 export default function CartPage() {
   const { items, removeItem } = useCart();
+  const [zoneId, setZoneId] = useState<ShippingZoneId | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -19,16 +21,22 @@ export default function CartPage() {
     })
     .filter((r): r is NonNullable<typeof r> => r !== null);
 
-  const total = rows.reduce((sum, r) => sum + r.price, 0);
+  const itemsTotal = rows.reduce((sum, r) => sum + r.price, 0);
+  const selectedZone = SHIPPING_ZONES.find((z) => z.id === zoneId);
+  const grandTotal = itemsTotal + (selectedZone?.price ?? 0);
 
   async function handleCheckout() {
+    if (!zoneId) {
+      setError("Pick where you're shipping to first.");
+      return;
+    }
     setLoading(true);
     setError(null);
     try {
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ items }),
+        body: JSON.stringify({ items, zoneId }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -95,11 +103,47 @@ export default function CartPage() {
         ))}
       </div>
 
+      <div className={styles.shippingZone}>
+        <span className={styles.shippingZoneLabel}>Shipping to</span>
+        <div className={styles.zoneOptions}>
+          {SHIPPING_ZONES.map((zone) => (
+            <button
+              key={zone.id}
+              className={`${styles.zoneBtn} ${zoneId === zone.id ? styles.zoneBtnActive : ""}`}
+              onClick={() => setZoneId(zone.id)}
+            >
+              <span className={styles.zoneName}>{zone.label}</span>
+              <span className={styles.zonePrice}>EUR {zone.price}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className={styles.summary}>
+        <span>Items</span>
+        <span className={styles.subtotal}>
+          <span className={styles.cur}>EUR</span>
+          {itemsTotal}
+        </span>
+      </div>
+      <div className={styles.summary}>
+        <span>Shipping</span>
+        <span className={styles.subtotal}>
+          {selectedZone ? (
+            <>
+              <span className={styles.cur}>EUR</span>
+              {selectedZone.price}
+            </>
+          ) : (
+            "—"
+          )}
+        </span>
+      </div>
       <div className={styles.summary}>
         <span>Total</span>
         <span className={styles.total}>
           <span className={styles.cur}>EUR</span>
-          {total}
+          {grandTotal}
         </span>
       </div>
 

@@ -3,6 +3,7 @@ import Stripe from "stripe";
 import { resolveCartItem } from "@/lib/cart-pricing";
 import type { CartItem } from "@/lib/CartContext";
 import { WORLDWIDE_SHIPPING_COUNTRIES } from "@/lib/shipping-countries";
+import { getShippingZone, type ShippingZoneId } from "@/lib/shipping-zones";
 
 export async function POST(request: Request) {
   const secretKey = process.env.STRIPE_SECRET_KEY;
@@ -19,14 +20,24 @@ export async function POST(request: Request) {
   });
 
   let items: CartItem[];
+  let zoneId: ShippingZoneId;
   try {
     const body = await request.json();
     items = body.items;
+    zoneId = body.zoneId;
     if (!Array.isArray(items) || items.length === 0) {
       throw new Error("empty");
     }
   } catch {
     return NextResponse.json({ error: "Your cart is empty." }, { status: 400 });
+  }
+
+  const zone = getShippingZone(zoneId);
+  if (!zone) {
+    return NextResponse.json(
+      { error: "Pick where you're shipping to before checking out." },
+      { status: 400 },
+    );
   }
 
   // Every price/title/image is resolved fresh from our own data here —
@@ -49,9 +60,9 @@ export async function POST(request: Request) {
   // the "Metadata" section on the payment's detail page in the Stripe
   // Dashboard, so it's visible at a glance without digging through the
   // checkout summary sub-section.
-  const orderSummary = resolved
-    .map((item) => `${item.title} (${item.meta})`)
-    .join(" | ");
+  const orderSummary =
+    resolved.map((item) => `${item.title} (${item.meta})`).join(" | ") +
+    ` | Shipping: ${zone.label} (EUR ${zone.price})`;
 
   try {
     const session = await stripe.checkout.sessions.create({
@@ -80,66 +91,24 @@ export async function POST(request: Request) {
       shipping_address_collection: {
         allowed_countries: [...WORLDWIDE_SHIPPING_COUNTRIES],
       },
-      // Customer picks the zone that matches where they're shipping to.
-      // All tracked (recommended for commercial/merchandise sales, not
-      // plain mail) — figures based on ELTA's international tracked
-      // letter/small-packet rates for a lightweight A4/A5 envelope.
-      // Stripe doesn't verify the customer actually lives in the zone
-      // they pick, so this runs on an honor-system basis — fine for a
-      // small shop, just worth knowing it isn't enforced.
+      // Only the zone the customer actually picked on the cart page is
+      // sent to Stripe — not a list of all five for them to (maybe)
+      // notice and correct. This is what fixes the earlier bug where
+      // Greece's rate stayed selected by default even for a Belgium
+      // address, since Stripe's shipping_options aren't tied to the
+      // address someone types in.
       shipping_options: [
         {
           shipping_rate_data: {
             type: "fixed_amount",
-            fixed_amount: { amount: 400, currency: "eur" },
-            display_name: "Greece",
-            delivery_estimate: {
-              minimum: { unit: "business_day", value: 1 },
-              maximum: { unit: "business_day", value: 3 },
+            fixed_amount: {
+              amount: Math.round(zone.price * 100),
+              currency: "eur",
             },
-          },
-        },
-        {
-          shipping_rate_data: {
-            type: "fixed_amount",
-            fixed_amount: { amount: 690, currency: "eur" },
-            display_name: "Europe",
+            display_name: zone.label,
             delivery_estimate: {
-              minimum: { unit: "business_day", value: 4 },
-              maximum: { unit: "business_day", value: 8 },
-            },
-          },
-        },
-        {
-          shipping_rate_data: {
-            type: "fixed_amount",
-            fixed_amount: { amount: 1190, currency: "eur" },
-            display_name: "USA & Canada",
-            delivery_estimate: {
-              minimum: { unit: "business_day", value: 4 },
-              maximum: { unit: "business_day", value: 10 },
-            },
-          },
-        },
-        {
-          shipping_rate_data: {
-            type: "fixed_amount",
-            fixed_amount: { amount: 1290, currency: "eur" },
-            display_name: "Asia",
-            delivery_estimate: {
-              minimum: { unit: "business_day", value: 4 },
-              maximum: { unit: "business_day", value: 10 },
-            },
-          },
-        },
-        {
-          shipping_rate_data: {
-            type: "fixed_amount",
-            fixed_amount: { amount: 1490, currency: "eur" },
-            display_name: "Rest of World",
-            delivery_estimate: {
-              minimum: { unit: "business_day", value: 5 },
-              maximum: { unit: "business_day", value: 12 },
+              minimum: { unit: "business_day", value: zone.minDays },
+              maximum: { unit: "business_day", value: zone.maxDays },
             },
           },
         },
