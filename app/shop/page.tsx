@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { getPaintingById } from "@/lib/paintings";
 import { getTarotCardById } from "@/lib/tarot";
 import styles from "./page.module.css";
@@ -40,11 +39,12 @@ export default function ShopPage() {
             className={styles.category}
           >
             {cat.image && (
-              <Image
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
                 src={cat.image}
                 alt={cat.title}
-                fill
-                sizes="34vw"
+                loading="lazy"
+                decoding="async"
                 className={styles.categoryImg}
               />
             )}
@@ -53,11 +53,12 @@ export default function ShopPage() {
         ) : (
           <div key={cat.slug} className={styles.categoryDisabled}>
             {cat.image && (
-              <Image
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
                 src={cat.image}
                 alt={cat.title}
-                fill
-                sizes="34vw"
+                loading="lazy"
+                decoding="async"
                 className={styles.categoryImg}
               />
             )}
