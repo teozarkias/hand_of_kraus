@@ -1,11 +1,13 @@
 import Link from "next/link";
 import PurchaseOptions from "@/components/PurchaseOptions";
 import ZoomableImage from "@/components/ZoomableImage";
+import { getPrintSizesFor } from "@/lib/print-sizes";
 import styles from "./ProductDetail.module.css";
 
 // Works for both a full Painting and a lighter TarotCard — only id, title,
 // image, and price are required; the rest are optional so tarot cards
-// (which don't have medium/year/size/available) still fit.
+// (which don't have medium/year/size/available) still fit. printSizes is
+// how a painting can override the site-wide default A4/A5 sizes/prices.
 interface DetailItem {
   id: string;
   title: string;
@@ -15,6 +17,7 @@ interface DetailItem {
   year?: string;
   size?: string;
   available?: boolean;
+  printSizes?: { id: string; label: string; dims: string; price: number }[];
 }
 
 export default function ProductDetail({
@@ -34,6 +37,11 @@ export default function ProductDetail({
       : kind === "print"
         ? "Print"
         : "Tarot card";
+
+  // Only prints and tarot cards need a size list — originals are a single
+  // physical object. This resolves the painting's own custom sizes if it
+  // has any (see lib/paintings.ts), otherwise the site-wide default.
+  const sizes = kind !== "original" ? getPrintSizesFor(painting) : [];
 
   return (
     <div className={styles.detail}>
@@ -88,6 +96,7 @@ export default function ProductDetail({
               paintingId={painting.id}
               kind={kind}
               originalPrice={painting.price}
+              sizes={sizes}
             />
           )}
         </div>

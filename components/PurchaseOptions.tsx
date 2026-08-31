@@ -2,32 +2,38 @@
 
 import { useState } from "react";
 import { useCart } from "@/lib/CartContext";
-import { PRINT_SIZES, type PrintSizeId } from "@/lib/pricing";
+import type { ResolvedPrintSize } from "@/lib/print-sizes";
 import styles from "./PurchaseOptions.module.css";
 
 export default function PurchaseOptions({
   paintingId,
   kind,
   originalPrice,
+  sizes,
 }: {
   paintingId: string;
   kind: "original" | "print" | "tarot";
   originalPrice: number;
+  // Resolved size options (label/dims/price) — the caller works out
+  // whether this painting/card has a custom override or should fall
+  // back to the site-wide default, via lib/print-sizes.ts.
+  sizes: ResolvedPrintSize[];
 }) {
   const { addItem } = useCart();
-  const [sizeId, setSizeId] = useState<PrintSizeId>("a4");
+  const showSizeChoice =
+    (kind === "print" || kind === "tarot") && sizes.length > 0;
+  const [sizeId, setSizeId] = useState<string>(sizes[0]?.id ?? "");
   const [added, setAdded] = useState(false);
 
-  const selectedSize = PRINT_SIZES.find((s) => s.id === sizeId)!;
-  const showSizeChoice = kind === "print" || kind === "tarot";
-  const price = showSizeChoice ? selectedSize.price : originalPrice;
+  const selectedSize = sizes.find((s) => s.id === sizeId);
+  const price = showSizeChoice
+    ? (selectedSize?.price ?? originalPrice)
+    : originalPrice;
 
   function handleAdd() {
     if (showSizeChoice) {
       addItem({ paintingId, kind, size: sizeId });
     } else {
-      // "original" is a single fixed-price item — a one-of-one painting,
-      // no size choice.
       addItem({ paintingId, kind });
     }
     setAdded(true);
@@ -42,7 +48,7 @@ export default function PurchaseOptions({
         <div className={styles.sizeRow}>
           <span className={styles.sizeLabel}>Size</span>
           <div className={styles.sizeOptions}>
-            {PRINT_SIZES.map((s) => (
+            {sizes.map((s) => (
               <button
                 key={s.id}
                 className={`${styles.sizeBtn} ${

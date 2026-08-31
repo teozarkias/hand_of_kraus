@@ -4,12 +4,14 @@ import { createContext, useContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
 import { getPaintingById } from "./paintings";
 import { getTarotCardById } from "./tarot";
-import type { PrintSizeId } from "./pricing";
 
 export interface CartItem {
   paintingId: string;
   kind: "original" | "print" | "tarot";
-  size?: PrintSizeId; // set when kind === "print" or "tarot"
+  // Plain string, not a fixed union — paintings can define their own
+  // custom print size ids (e.g. "a3", "large") via printSizes overrides
+  // in lib/paintings.ts, not just the site-wide default "a4"/"a5".
+  size?: string;
 }
 
 interface CartContextValue {

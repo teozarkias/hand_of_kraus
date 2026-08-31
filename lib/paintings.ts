@@ -1,3 +1,10 @@
+export interface PrintSizeOverride {
+  id: string;
+  label: string;
+  dims: string;
+  price: number;
+}
+
 export interface Painting {
   id: string;
   title: string;
@@ -12,6 +19,11 @@ export interface Painting {
   // artist wants to keep them, license restrictions, etc.) but should
   // still be sellable as prints. Defaults to true when omitted.
   originalForSale?: boolean;
+  // Overrides the site-wide default A4/A5 print sizes/prices for this
+  // specific painting — some pieces print at non-standard dimensions or
+  // need their own pricing. Falls back to the global defaults in
+  // lib/pricing.ts when omitted.
+  printSizes?: PrintSizeOverride[];
 }
 
 export const paintings: Painting[] = [
@@ -24,6 +36,24 @@ export const paintings: Painting[] = [
     year: "2026",
     price: 500,
     available: true,
+    printSizes: [
+      { id: "a4", label: "Large", dims: "29.6 × 32.5 cm", price: 20 },
+      { id: "a5", label: "Small", dims: "20.9 × 23 cm", price: 10 },
+    ],
+  },
+  {
+    id: "dead-sea",
+    title: "Dead Sea",
+    image: "/paintings/Dead_Sea.jpg",
+    medium: "Ink on paper",
+    size: "29.7 x 42 cm",
+    year: "2026",
+    price: 1200,
+    available: true,
+    printSizes: [
+      { id: "a4", label: "A4", dims: "21 × 29.7 cm", price: 20 },
+      { id: "a3", label: "A3", dims: "29.7 × 42 cm", price: 35 },
+    ],
   },
   {
     id: "items-ii",
@@ -55,6 +85,10 @@ export const paintings: Painting[] = [
     year: "2026",
     price: 400,
     available: true,
+    printSizes: [
+      { id: "large", label: "Large", dims: "20.8 × 20.8 cm", price: 20 },
+      { id: "small", label: "Small", dims: "14.7 × 14.7 cm", price: 10 },
+    ],
   },
   {
     id: "immortality",

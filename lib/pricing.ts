@@ -5,6 +5,6 @@ export const PRINT_SIZES = [
 
 export type PrintSizeId = (typeof PRINT_SIZES)[number]["id"];
 
-export function getPrintSize(id: PrintSizeId) {
-  return PRINT_SIZES.find((s) => s.id === id)!;
+export function getPrintSize(id: string) {
+  return PRINT_SIZES.find((s) => s.id === id);
 }

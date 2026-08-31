@@ -1,6 +1,7 @@
 import { getPaintingById } from "./paintings";
 import { getTarotCardById } from "./tarot";
 import { getPrintSize } from "./pricing";
+import { getPrintSizeFor } from "./print-sizes";
 import type { CartItem } from "./CartContext";
 
 export interface ResolvedCartItem {
@@ -17,34 +18,52 @@ export interface ResolvedCartItem {
 // our own data files — title, price, and image never come from whatever
 // the browser happens to send.
 export function resolveCartItem(item: CartItem): ResolvedCartItem | null {
-  const product =
-    item.kind === "tarot"
-      ? getTarotCardById(item.paintingId)
-      : getPaintingById(item.paintingId);
+  // Handled as two separate branches (rather than one shared lookup) so
+  // TypeScript narrows `product`/`card` to a concrete type in each one —
+  // TarotCard has no printSizes field at all, so passing the wider
+  // Painting | TarotCard union into a Painting-only helper doesn't type-check.
+  if (item.kind === "tarot") {
+    const card = getTarotCardById(item.paintingId);
+    if (!card) return null;
 
-  if (!product) return null;
+    const printSize = getPrintSize(item.size ?? "");
+    const price = printSize ? printSize.price : card.price;
 
-  const price =
-    item.kind === "print" || item.kind === "tarot"
-      ? getPrintSize(item.size!).price
-      : product.price;
+    return {
+      id: card.id,
+      title: card.title,
+      image: card.imageThumb,
+      price,
+      meta: `Tarot card · ${printSize?.label ?? item.size ?? ""}`,
+      href: `/shop/tarot/${card.id}`,
+    };
+  }
+
+  const painting = getPaintingById(item.paintingId);
+  if (!painting) return null;
+
+  const printSize =
+    item.kind === "print"
+      ? getPrintSizeFor(painting, item.size ?? "")
+      : undefined;
+  const price = printSize ? printSize.price : painting.price;
 
   const href =
     item.kind === "original"
-      ? `/shop/originals/${product.id}`
-      : item.kind === "print"
-        ? `/shop/prints/${product.id}`
-        : `/shop/tarot/${product.id}`;
+      ? `/shop/originals/${painting.id}`
+      : `/shop/prints/${painting.id}`;
 
   const meta =
     item.kind === "original"
-      ? `Original${"medium" in product ? ` · ${product.medium}` : ""}`
-      : item.kind === "print"
-        ? `Print · ${getPrintSize(item.size!).label}`
-        : `Tarot card · ${getPrintSize(item.size!).label}`;
+      ? `Original · ${painting.medium}`
+      : `Print · ${printSize?.label ?? item.size ?? ""}`;
 
-  // Tarot cards have separate full/thumb fields; paintings only have one.
-  const image = "imageThumb" in product ? product.imageThumb : product.image;
-
-  return { id: product.id, title: product.title, image, price, meta, href };
+  return {
+    id: painting.id,
+    title: painting.title,
+    image: painting.image,
+    price,
+    meta,
+    href,
+  };
 }
