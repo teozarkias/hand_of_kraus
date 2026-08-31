@@ -27,7 +27,7 @@ export const paintings: Painting[] = [
   },
   {
     id: "items-ii",
-    title: "ITEMS II",
+    title: "ITEMS I",
     image: "/paintings/ITEMS-II.jpg",
     medium: "Ink on paper",
     size: "21 × 29.7 cm",
@@ -78,7 +78,7 @@ export const paintings: Painting[] = [
   },
   {
     id: "items",
-    title: "ITEMS I",
+    title: "ITEMS II",
     image: "/paintings/ITEMS.jpg",
     medium: "Ink on paper",
     size: "21 × 29.7 cm",

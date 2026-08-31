@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Fraunces, Jost } from "next/font/google";
 import { CartProvider } from "@/lib/CartContext";
 import HeaderCart from "@/components/HeaderCart";
+import MobileNav from "@/components/MobileNav";
 import styles from "./layout.module.css";
 import "./globals.css";
 
@@ -42,7 +43,10 @@ export default function RootLayout({
               <a href="/works">Works</a>
               <a href="/shop">Shop</a>
             </nav>
-            <HeaderCart />
+            <div className={styles.right}>
+              <MobileNav />
+              <HeaderCart />
+            </div>
           </header>
           <main>{children}</main>
           <footer className={styles.footer}>
