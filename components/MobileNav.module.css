@@ -1,15 +1,11 @@
 .trigger {
   display: none;
-  position: fixed;
-  top: 2.5rem;
-  right: calc(4vw + 100px);
-  z-index: 1000;
   flex-direction: column;
   justify-content: center;
   gap: 5px;
   width: 28px;
   height: 24px;
-  background: var(--bg);
+  background: none;
   border: none;
   padding: 0;
 }
