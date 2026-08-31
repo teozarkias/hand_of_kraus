@@ -100,4 +100,7 @@
   .categoryDisabled {
     aspect-ratio: 4 / 3;
   }
+  .categoryLabel {
+    opacity: 1;
+  }
 }
