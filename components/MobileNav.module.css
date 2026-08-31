@@ -1,7 +1,7 @@
 .trigger {
   display: none;
   position: fixed;
-  top: 2rem;
+  top: 2.5rem;
   right: calc(4vw + 100px);
   z-index: 1000;
   flex-direction: column;
