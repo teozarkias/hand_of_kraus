@@ -1,11 +1,15 @@
 .trigger {
   display: none;
+  position: fixed;
+  top: 2rem;
+  right: calc(4vw + 100px);
+  z-index: 1000;
   flex-direction: column;
   justify-content: center;
   gap: 5px;
   width: 28px;
   height: 24px;
-  background: none;
+  background: var(--bg);
   border: none;
   padding: 0;
 }
@@ -36,12 +40,6 @@
   to {
     opacity: 1;
   }
-}
-
-.right {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
 }
 
 .close {
