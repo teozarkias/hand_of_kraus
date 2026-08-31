@@ -57,7 +57,7 @@ export const paintings: Painting[] = [
   },
   {
     id: "items-ii",
-    title: "ITEMS I",
+    title: "ITEMS II",
     image: "/paintings/ITEMS-II.jpg",
     medium: "Ink on paper",
     size: "21 × 29.7 cm",
@@ -112,7 +112,7 @@ export const paintings: Painting[] = [
   },
   {
     id: "items",
-    title: "ITEMS II",
+    title: "ITEMS I",
     image: "/paintings/ITEMS.jpg",
     medium: "Ink on paper",
     size: "21 × 29.7 cm",
@@ -152,9 +152,9 @@ export const paintings: Painting[] = [
     available: true,
   },
   {
-    id: "vessels",
+    id: "VESSELS",
     title: "Vessels II",
-    image: "/paintings/VESSELS_1.jpg",
+    image: "/paintings/VESSELS.jpg",
     medium: "Ink on paper",
     size: "21 × 29.7 cm",
     year: "2025",
@@ -185,9 +185,9 @@ export const paintings: Painting[] = [
     originalForSale: false,
   },
   {
-    id: "VESSELS",
+    id: "vessels",
     title: "Vessels I",
-    image: "/paintings/VESSELS.jpg",
+    image: "/paintings/VESSELS_1.jpg",
     medium: "Ink on paper",
     size: "21 × 29.7 cm",
     year: "2025",

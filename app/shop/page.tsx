@@ -6,7 +6,7 @@ import styles from "./page.module.css";
 
 const printsImage = getPaintingById("immortality")?.image;
 // Deliberately the raw/unframed sketch, not the finished framed card.
-const tarotImage = getTarotCardById("the-magician")?.previewImage;
+const tarotImage = getTarotCardById("the-magician-ii")?.previewImage;
 
 const categories = [
   {
