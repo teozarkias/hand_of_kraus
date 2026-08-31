@@ -17,7 +17,7 @@ export default function PrintsShopPage() {
           <Link
             key={painting.id}
             href={`/shop/prints/${painting.id}`}
-            className={styles.piece}
+            className={`${styles.piece} ${painting.id === "dead-sea" ? styles.pieceWide : ""}`}
             style={{ animationDelay: `${Math.min(index * 0.05, 0.4)}s` }}
           >
             <div className={styles.imgWrap}>

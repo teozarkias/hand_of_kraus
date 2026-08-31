@@ -33,6 +33,10 @@
   animation: fadeInUp 0.6s ease forwards;
 }
 
+.pieceWide {
+  grid-column: span 2;
+}
+
 .image {
   display: block;
   width: 100%;
@@ -44,6 +48,7 @@
 }
 
 .piece:hover .image {
+  opacity: 0.82;
   transform: scale(1.08);
 }
 

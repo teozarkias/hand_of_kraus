@@ -1,26 +1,30 @@
 import Link from "next/link";
 import Image from "next/image";
-import { paintings } from "@/lib/paintings";
-import { tarotCards } from "@/lib/tarot";
+import { getPaintingById } from "@/lib/paintings";
+import { getTarotCardById } from "@/lib/tarot";
 import styles from "./page.module.css";
+
+const printsImage = getPaintingById("immortality")?.image;
+// Deliberately the raw/unframed sketch, not the finished framed card.
+const tarotImage = getTarotCardById("the-magician")?.previewImage;
 
 const categories = [
   {
     slug: "originals",
     title: "Originals",
-    image: paintings[0]?.image,
+    image: getPaintingById("killers-of-the-southern-oracle")?.image,
     available: true,
   },
   {
     slug: "prints",
     title: "Prints",
-    image: paintings[2]?.image,
+    image: printsImage,
     available: true,
   },
   {
     slug: "tarot",
     title: "Tarot",
-    image: tarotCards[0]?.image,
+    image: tarotImage,
     available: true,
   },
 ];

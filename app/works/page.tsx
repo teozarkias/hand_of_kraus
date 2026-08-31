@@ -15,7 +15,7 @@ export default function WorksPage() {
         {paintings.map((painting, index) => (
           <button
             key={painting.id}
-            className={styles.piece}
+            className={`${styles.piece} ${painting.id === "dead-sea" ? styles.pieceWide : ""}`}
             onClick={() => setActive(painting)}
             aria-label={`View ${painting.title}`}
             style={{ animationDelay: `${Math.min(index * 0.05, 0.4)}s` }}

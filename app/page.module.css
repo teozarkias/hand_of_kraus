@@ -1,27 +1,33 @@
+/* 112px approximates the header's rendered height (padding + logo line),
+   so hero + socials fill exactly what's left of the viewport with no
+   page scroll. If there's still a sliver of scroll on your screen, this
+   is the one number to nudge up slightly. */
+.page {
+  display: flex;
+  flex-direction: column;
+  height: calc(100dvh - 112px);
+}
+
 .hero {
-  display: block;
   position: relative;
-  width: 100%;
-  line-height: 0;
+  flex: 1;
+  overflow: hidden;
 }
 
 .heroImg {
   display: block;
   width: 100%;
-  height: auto;
-  transition: opacity 0.5s ease;
-}
-
-.hero:hover .heroImg {
-  opacity: 0.9;
+  height: 100%;
+  object-fit: cover;
 }
 
 .socials {
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  padding: 2.4rem 4vw;
+  padding: 1.6rem 4vw;
   font-size: 0.78rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { paintings } from "@/lib/paintings";
 import { tarotCards } from "@/lib/tarot";
 import PreloadGate from "@/components/PreloadGate";
@@ -23,28 +22,30 @@ export default function HomePage() {
     <PreloadGate images={preloadImages}>
       <SitePreloader images={siteWideImages} />
 
-      <Link href="/works" className={styles.hero}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={HERO_IMAGE} alt="" className={styles.heroImg} />
-      </Link>
+      <div className={styles.page}>
+        <div className={styles.hero}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={HERO_IMAGE} alt="" className={styles.heroImg} />
+        </div>
 
-      <section className={styles.socials}>
-        <a
-          href="https://www.instagram.com/hand_of_kraus/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Instagram
-        </a>
-        <span className={styles.divider}>·</span>
-        <a
-          href="https://www.tiktok.com/@hand_of_kraus"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          TikTok
-        </a>
-      </section>
+        <section className={styles.socials}>
+          <a
+            href="https://www.instagram.com/hand_of_kraus/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Instagram
+          </a>
+          <span className={styles.divider}>·</span>
+          <a
+            href="https://www.tiktok.com/@hand_of_kraus"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            TikTok
+          </a>
+        </section>
+      </div>
     </PreloadGate>
   );
 }

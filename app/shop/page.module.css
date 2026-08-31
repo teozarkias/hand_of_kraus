@@ -82,7 +82,7 @@
 .soon {
   font-family: var(--font-jost);
   font-style: normal;
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--fg-dim);
@@ -91,7 +91,6 @@
 @media (max-width: 860px) {
   .grid {
     grid-template-columns: 1fr;
-    height: auto;
   }
   .category,
   .categoryDisabled {
