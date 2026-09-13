@@ -17,6 +17,10 @@
      directly via JS on every mousemove for an instant, fluid pan, so we
      don't want the transition fighting that by easing every origin change. */
   transition: transform 0.4s cubic-bezier(0.16, 0.8, 0.24, 1);
+  /* Promotes this to its own compositor layer so panning while zoomed is a
+     cheap GPU transform instead of a full repaint of the image on every
+     mousemove frame. */
+  will-change: transform;
 }
 
 .zoomed {

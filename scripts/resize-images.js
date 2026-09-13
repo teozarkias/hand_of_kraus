@@ -14,6 +14,11 @@
  * Once you've checked the optimized versions look right, swap them in:
  * rename public/tarot -> public/tarot-original, then
  * public/tarot-optimized -> public/tarot (same for paintings).
+ *
+ * 2600px / quality 92 is deliberately generous, not aggressive — the
+ * goal is trimming invisible excess resolution (nobody's screen can
+ * show more detail than this at any zoom level this site offers), not
+ * visibly compressing the art.
  */
 
 const fs = require("fs");

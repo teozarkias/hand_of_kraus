@@ -1,7 +1,13 @@
 import { notFound, redirect } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
 import { getTarotCardById, getAllTarotIds } from "@/lib/tarot";
 import styles from "./page.module.css";
+
+// Aspect-ratio hint only — see TarotCardStack for why the exact numbers
+// don't matter to how it renders.
+const CARD_WIDTH = 900;
+const CARD_HEIGHT = 1500;
 
 export function generateStaticParams() {
   return getAllTarotIds().map((id) => ({ id }));
@@ -41,18 +47,28 @@ export default async function TarotChoosePage({
           href={`/shop/tarot/${card.id}?variant=preview`}
           className={styles.option}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={card.previewImageThumb}
+          <Image
+            src={card.previewImageThumb!}
             alt=""
+            width={CARD_WIDTH}
+            height={CARD_HEIGHT}
+            sizes="(max-width: 600px) 90vw, 45vw"
+            quality={90}
             className={styles.optionImg}
           />
           <span className={styles.optionLabel}>Sketch</span>
         </Link>
 
         <Link href={`/shop/tarot/${card.id}`} className={styles.option}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={card.imageThumb} alt="" className={styles.optionImg} />
+          <Image
+            src={card.imageThumb}
+            alt=""
+            width={CARD_WIDTH}
+            height={CARD_HEIGHT}
+            sizes="(max-width: 600px) 90vw, 45vw"
+            quality={90}
+            className={styles.optionImg}
+          />
           <span className={styles.optionLabel}>Framed Card</span>
         </Link>
       </div>

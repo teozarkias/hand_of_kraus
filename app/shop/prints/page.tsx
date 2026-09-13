@@ -1,11 +1,17 @@
+import Image from "next/image";
 import Link from "next/link";
-import { paintings } from "@/lib/paintings";
+import { paintings, getPaintingAspectRatio } from "@/lib/paintings";
 import PreloadGate from "@/components/PreloadGate";
 import styles from "./page.module.css";
 
+// Only the first row needs to be ready before the page reveals itself —
+// blocking on the whole gallery behind the loading curtain is what made
+// this page feel like it hung on load.
+const PRELOAD_COUNT = 4;
+
 export default function PrintsShopPage() {
   return (
-    <PreloadGate images={paintings.map((p) => p.image)}>
+    <PreloadGate images={paintings.slice(0, PRELOAD_COUNT).map((p) => p.image)}>
       <div className={styles.topBar}>
         <Link href="/shop" className={styles.back}>
           &larr; Shop
@@ -21,12 +27,14 @@ export default function PrintsShopPage() {
             style={{ animationDelay: `${Math.min(index * 0.05, 0.4)}s` }}
           >
             <div className={styles.imgWrap}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src={painting.image}
                 alt=""
-                loading="lazy"
-                decoding="async"
+                width={1200}
+                height={Math.round(1200 / getPaintingAspectRatio(painting))}
+                loading={index < PRELOAD_COUNT ? "eager" : "lazy"}
+                sizes="(max-width: 600px) 50vw, (max-width: 900px) 33vw, (max-width: 1200px) 25vw, 20vw"
+                quality={90}
                 className={styles.image}
               />
             </div>

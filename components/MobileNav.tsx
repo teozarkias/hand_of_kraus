@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import styles from "./MobileNav.module.css";
 
 export default function MobileNav() {
@@ -42,16 +43,18 @@ export default function MobileNav() {
           >
             &times;
           </button>
+          {/* next/link for the same reason as the header: raw anchors force
+              a full page reload on every tap. */}
           <nav className={styles.links}>
-            <a href="/" onClick={() => setOpen(false)}>
+            <Link href="/" onClick={() => setOpen(false)}>
               Home
-            </a>
-            <a href="/works" onClick={() => setOpen(false)}>
+            </Link>
+            <Link href="/works" onClick={() => setOpen(false)}>
               Works
-            </a>
-            <a href="/shop" onClick={() => setOpen(false)}>
+            </Link>
+            <Link href="/shop" onClick={() => setOpen(false)}>
               Shop
-            </a>
+            </Link>
           </nav>
         </div>
       )}

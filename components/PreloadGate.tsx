@@ -26,10 +26,12 @@ export default function PreloadGate({
     let cancelled = false;
 
     // Safety net: never block the page forever if one image is huge,
-    // slow, or 404s without firing a clean error event.
+    // slow, or 404s without firing a clean error event. Kept short — a
+    // couple of straggler images fading in late is much better than the
+    // whole page sitting behind the curtain.
     const fallback = setTimeout(() => {
       if (!cancelled) setReady(true);
-    }, 5000);
+    }, 2000);
 
     function markLoaded() {
       loadedCount += 1;

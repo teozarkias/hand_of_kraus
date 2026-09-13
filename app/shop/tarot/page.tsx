@@ -4,13 +4,16 @@ import PreloadGate from "@/components/PreloadGate";
 import TarotCardStack from "@/components/TarotCardStack";
 import styles from "./page.module.css";
 
+// Only the first row needs to be ready before the page reveals itself.
+const PRELOAD_CARD_COUNT = 4;
+
 export default function TarotShopPage() {
   const cards = getAllTarotCards();
 
   // Only the small thumb versions get preloaded here — the full-quality
   // files are only fetched once someone actually opens a specific card's
   // buy page, where the extra detail is worth the extra weight.
-  const preloadImages = cards.flatMap((c) =>
+  const preloadImages = cards.slice(0, PRELOAD_CARD_COUNT).flatMap((c) =>
     c.previewImageThumb ? [c.previewImageThumb, c.imageThumb] : [c.imageThumb],
   );
 
@@ -48,6 +51,7 @@ export default function TarotShopPage() {
                 previewSrc={card.imageThumb}
                 finalSrc={card.previewImageThumb}
                 alt=""
+                eager={index < PRELOAD_CARD_COUNT}
               />
             </div>
             <div className={styles.pieceTitle}>{card.title}</div>

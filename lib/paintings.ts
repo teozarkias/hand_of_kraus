@@ -230,6 +230,27 @@ export function getFeaturedPaintings(): Painting[] {
   return paintings.filter((p) => p.featured);
 }
 
+// Derives a width/height ratio from the physical size we already print on
+// the plaque (e.g. "20.9 × 23 cm" or "29.7 x 42 cm"), so <Image> can be
+// given accurate intrinsic dimensions for a piece without needing to open
+// the actual file. Used only as a layout/aspect-ratio hint — the browser
+// still renders each image at its own real dimensions once it loads, so a
+// slightly-off guess here never crops or distorts anything on screen.
+const FALLBACK_RATIO = 0.8;
+
+export function getPaintingAspectRatio(
+  painting: Pick<Painting, "size">,
+): number {
+  const match = painting.size?.match(
+    /(\d+(?:\.\d+)?)\s*[×x]\s*(\d+(?:\.\d+)?)/i,
+  );
+  if (!match) return FALLBACK_RATIO;
+  const width = parseFloat(match[1]);
+  const height = parseFloat(match[2]);
+  if (!width || !height) return FALLBACK_RATIO;
+  return width / height;
+}
+
 export function getOriginalsForSale(): Painting[] {
   return paintings.filter((p) => p.originalForSale !== false);
 }

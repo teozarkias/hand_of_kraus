@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Fraunces, Jost } from "next/font/google";
 import { CartProvider } from "@/lib/CartContext";
 import HeaderCart from "@/components/HeaderCart";
@@ -35,13 +36,17 @@ export default function RootLayout({
       <body className={`${fraunces.variable} ${jost.variable}`}>
         <CartProvider>
           <header className={styles.header}>
-            <a href="/" className={styles.logo}>
+            {/* next/link instead of raw <a>: a raw anchor forces a full
+                browser reload of the whole app on every menu click (the
+                3-4s lag); Link does an instant in-app transition and
+                prefetches the target page while the link is on screen. */}
+            <Link href="/" className={styles.logo}>
               Kraus
-            </a>
+            </Link>
             <nav className={styles.nav}>
-              <a href="/">Home</a>
-              <a href="/works">Works</a>
-              <a href="/shop">Shop</a>
+              <Link href="/">Home</Link>
+              <Link href="/works">Works</Link>
+              <Link href="/shop">Shop</Link>
             </nav>
             <div className={styles.right}>
               <MobileNav />

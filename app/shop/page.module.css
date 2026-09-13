@@ -95,10 +95,18 @@
 @media (max-width: 860px) {
   .grid {
     grid-template-columns: 1fr;
+    height: auto;
   }
   .category,
   .categoryDisabled {
-    aspect-ratio: 4 / 3;
+    aspect-ratio: auto;
+  }
+  .categoryImg {
+    position: static;
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: unset;
   }
   .categoryLabel {
     opacity: 1;
