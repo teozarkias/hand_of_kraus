@@ -9,7 +9,7 @@ export const SHIPPING_ZONES = [
   {
     id: "europe",
     label: "Europe",
-    price: 6.9,
+    price: 9,
     minDays: 4,
     maxDays: 8,
   },

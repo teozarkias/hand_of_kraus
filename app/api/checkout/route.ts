@@ -91,6 +91,12 @@ export async function POST(request: Request) {
       shipping_address_collection: {
         allowed_countries: [...WORLDWIDE_SHIPPING_COUNTRIES],
       },
+      // Collected alongside the shipping address so Kraus has a way to
+      // reach the customer about delivery — shows up on the payment and
+      // on the checkout session in the Stripe Dashboard.
+      phone_number_collection: {
+        enabled: true,
+      },
       // Only the zone the customer actually picked on the cart page is
       // sent to Stripe — not a list of all five for them to (maybe)
       // notice and correct. This is what fixes the earlier bug where

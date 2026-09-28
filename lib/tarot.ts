@@ -37,6 +37,29 @@ function makeCard(
   };
 }
 
+// Same as makeCard, but for cards that don't have matching files in
+// public/tarot-thumbs yet — the grid thumbnail points straight at the
+// full-size file instead, and next/image resizes it down on the fly (the
+// same way the paintings gallery already works, since it never had a
+// thumbs folder at all). Swap a card over to makeCard() once real thumbs
+// exist for it.
+function makeCardNoThumbs(
+  id: string,
+  title: string,
+  framedFilename: string,
+  sketchFilename: string,
+): TarotCard {
+  return {
+    id,
+    title,
+    price: DEFAULT_PRICE,
+    image: `/tarot/${framedFilename}`,
+    imageThumb: `/tarot/${framedFilename}`,
+    previewImage: `/tarot/${sketchFilename}`,
+    previewImageThumb: `/tarot/${sketchFilename}`,
+  };
+}
+
 export const tarotCards: TarotCard[] = [
   // Lovers — confirmed pairing from the artist's screenshot.
   makeCard("the-lovers", "The Lovers", "LOVERS2.jpg", "The_Lovers.jpg"),
@@ -65,6 +88,22 @@ export const tarotCards: TarotCard[] = [
   // Tower — same casing pattern.
   makeCard("the-tower", "The Tower", "TOWER2.jpg", "The_Tower.jpg"),
   makeCard("the-tower-ii", "The Tower?", "TOWER1.jpg", "The_Tower2.jpg"),
+
+  // Emperor — confirmed framed/sketch pairing (unlike Magician above, no
+  // guessing here). No tarot-thumbs files yet, so these use
+  // makeCardNoThumbs until real thumbnails are added.
+  makeCardNoThumbs(
+    "the-emperor",
+    "The Emperor",
+    "the_emperor.jpg",
+    "the_emperor1.jpg",
+  ),
+  makeCardNoThumbs(
+    "the-emperor-ii",
+    "The Emperor?",
+    "the_emperor2.jpg",
+    "the_emperor3.jpg",
+  ),
 ];
 
 export function getAllTarotCards(): TarotCard[] {
