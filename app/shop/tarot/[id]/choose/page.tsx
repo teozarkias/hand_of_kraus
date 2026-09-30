@@ -9,8 +9,14 @@ import styles from "./page.module.css";
 const CARD_WIDTH = 900;
 const CARD_HEIGHT = 1500;
 
-export function generateStaticParams() {
-  return getAllTarotIds().map((id) => ({ id }));
+// Cached, then refreshed instantly whenever something is saved in /admin.
+export const revalidate = 300;
+
+// Pre-builds every existing card for speed. Cards added later through
+// /admin aren't in this list, but still work: Next renders them on first
+// visit and caches them from then on.
+export async function generateStaticParams() {
+  return (await getAllTarotIds()).map((id) => ({ id }));
 }
 
 export default async function TarotChoosePage({
@@ -19,7 +25,7 @@ export default async function TarotChoosePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const card = getTarotCardById(id);
+  const card = await getTarotCardById(id);
 
   if (!card) {
     notFound();

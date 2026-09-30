@@ -15,15 +15,17 @@ export interface ResolvedCartItem {
 
 // Turns a stored CartItem (just an id + kind + optional size) into real,
 // trustworthy display/checkout data by looking everything up fresh from
-// our own data files — title, price, and image never come from whatever
-// the browser happens to send.
-export function resolveCartItem(item: CartItem): ResolvedCartItem | null {
+// the database — title, price, and image never come from whatever the
+// browser happens to send. Server-only (it reads from Supabase).
+export async function resolveCartItem(
+  item: CartItem,
+): Promise<ResolvedCartItem | null> {
   // Handled as two separate branches (rather than one shared lookup) so
   // TypeScript narrows `product`/`card` to a concrete type in each one —
   // TarotCard has no printSizes field at all, so passing the wider
   // Painting | TarotCard union into a Painting-only helper doesn't type-check.
   if (item.kind === "tarot") {
-    const card = getTarotCardById(item.paintingId);
+    const card = await getTarotCardById(item.paintingId);
     if (!card) return null;
 
     const printSize = getPrintSize(item.size ?? "");
@@ -39,8 +41,17 @@ export function resolveCartItem(item: CartItem): ResolvedCartItem | null {
     };
   }
 
-  const painting = getPaintingById(item.paintingId);
+  const painting = await getPaintingById(item.paintingId);
   if (!painting) return null;
+
+  // An original that's been marked sold (or not-for-sale) in the admin
+  // panel since it was added to someone's cart can't be bought anymore.
+  if (
+    item.kind === "original" &&
+    (!painting.available || painting.originalForSale === false)
+  ) {
+    return null;
+  }
 
   const printSize =
     item.kind === "print"

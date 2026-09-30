@@ -43,9 +43,9 @@ export async function POST(request: Request) {
   // Every price/title/image is resolved fresh from our own data here —
   // never trusted from whatever the browser sent. This is what stops
   // someone from editing a price in devtools before checkout.
-  const resolved = items
-    .map(resolveCartItem)
-    .filter((r): r is NonNullable<typeof r> => r !== null);
+  const resolved = (
+    await Promise.all(items.slice(0, 100).map((item) => resolveCartItem(item)))
+  ).filter((r): r is NonNullable<typeof r> => r !== null);
 
   if (resolved.length === 0) {
     return NextResponse.json(
@@ -75,7 +75,11 @@ export async function POST(request: Request) {
           product_data: {
             name: item.title,
             description: item.meta,
-            images: [`${origin}${item.image}`],
+            // Images uploaded through /admin are already full Supabase
+            // URLs; the original ones are paths inside /public.
+            images: [
+              item.image.startsWith("http") ? item.image : `${origin}${item.image}`,
+            ],
           },
         },
       })),

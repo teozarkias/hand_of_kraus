@@ -7,8 +7,13 @@ import styles from "./page.module.css";
 // Only the first row needs to be ready before the page reveals itself.
 const PRELOAD_CARD_COUNT = 4;
 
-export default function TarotShopPage() {
-  const cards = getAllTarotCards();
+// Cached, then refreshed instantly whenever something is saved in /admin
+// (see revalidateSite in app/admin/actions.ts). The 5-minute revalidate is
+// just a safety net in case an on-demand refresh is ever missed.
+export const revalidate = 300;
+
+export default async function TarotShopPage() {
+  const cards = await getAllTarotCards();
 
   // Only the small thumb versions get preloaded here — the full-quality
   // files are only fetched once someone actually opens a specific card's

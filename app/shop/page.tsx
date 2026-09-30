@@ -12,32 +12,39 @@ import styles from "./page.module.css";
 // to pick reasonable responsive widths.
 const CATEGORY_IMAGE_DIMENSIONS = { width: 1200, height: 1500 };
 
-const printsImage = getPaintingById("immortality")?.image;
-// Deliberately the raw/unframed sketch, not the finished framed card.
-const tarotImage = getTarotCardById("the-magician-ii")?.previewImage;
+// Cached, then refreshed instantly whenever something is saved in /admin
+// (see revalidateSite in app/admin/actions.ts).
+export const revalidate = 300;
 
-const categories = [
-  {
-    slug: "originals",
-    title: "Originals",
-    image: getPaintingById("killers-of-the-southern-oracle")?.image,
-    available: true,
-  },
-  {
-    slug: "prints",
-    title: "Prints",
-    image: printsImage,
-    available: true,
-  },
-  {
-    slug: "tarot",
-    title: "Tarot",
-    image: tarotImage,
-    available: true,
-  },
-];
+export default async function ShopPage() {
+  const [originalsPiece, printsPiece, tarotCard] = await Promise.all([
+    getPaintingById("killers-of-the-southern-oracle"),
+    getPaintingById("immortality"),
+    getTarotCardById("the-magician-ii"),
+  ]);
 
-export default function ShopPage() {
+  const categories = [
+    {
+      slug: "originals",
+      title: "Originals",
+      image: originalsPiece?.image,
+      available: true,
+    },
+    {
+      slug: "prints",
+      title: "Prints",
+      image: printsPiece?.image,
+      available: true,
+    },
+    {
+      slug: "tarot",
+      title: "Tarot",
+      // Deliberately the raw/unframed sketch, not the finished framed card.
+      image: tarotCard?.previewImage,
+      available: true,
+    },
+  ];
+
   return (
     <section className={styles.grid}>
       {categories.map((cat) =>

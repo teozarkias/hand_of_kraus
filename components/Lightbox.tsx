@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import type { Painting } from "@/lib/paintings";
+import type { Painting } from "@/lib/painting-utils";
 import styles from "./Lightbox.module.css";
 
 // Zooms up to 2.4x (see styles.zoomed) — sizes asks for more than the

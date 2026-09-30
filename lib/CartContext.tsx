@@ -2,8 +2,6 @@
 
 import { createContext, useContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
-import { getPaintingById } from "./paintings";
-import { getTarotCardById } from "./tarot";
 
 export interface CartItem {
   paintingId: string;
@@ -47,12 +45,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
     [items],
   );
 
+  // No existence check here anymore: the catalogue lives in the database
+  // now, which the browser can't (and shouldn't) query directly. Nothing
+  // is lost — the cart page and the checkout route both re-resolve every
+  // item on the server and silently drop anything that no longer exists.
   function addItem(item: CartItem) {
-    const exists =
-      item.kind === "tarot"
-        ? getTarotCardById(item.paintingId)
-        : getPaintingById(item.paintingId);
-    if (!exists) return;
     setItems((prev) => [...prev, item]);
   }
 

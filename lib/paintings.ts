@@ -1,256 +1,89 @@
-export interface PrintSizeOverride {
-  id: string;
-  label: string;
-  dims: string;
-  price: number;
-}
+import { cache } from "react";
+import { getSupabaseAdmin } from "./supabase";
+import type { Painting, PrintSizeOverride } from "./painting-utils";
 
-export interface Painting {
+// Re-exported so existing `import { ... } from "@/lib/paintings"` lines
+// keep working. Client components should import these from
+// "@/lib/painting-utils" instead, so they don't pull in the database code.
+export type { Painting, PrintSizeOverride } from "./painting-utils";
+export { getPaintingAspectRatio } from "./painting-utils";
+
+// Paintings used to be a hardcoded array in this file; they now live in the
+// Supabase `paintings` table, managed from /admin. Every function here
+// runs on the server only.
+
+interface PaintingRow {
   id: string;
   title: string;
   image: string;
   medium: string;
   size: string;
   year: string;
-  price: number;
+  price: number | string;
   available: boolean;
-  featured?: boolean;
-  // Some pieces can't be sold as the physical one-of-one original (the
-  // artist wants to keep them, license restrictions, etc.) but should
-  // still be sellable as prints. Defaults to true when omitted.
-  originalForSale?: boolean;
-  // Overrides the site-wide default A4/A5 print sizes/prices for this
-  // specific painting — some pieces print at non-standard dimensions or
-  // need their own pricing. Falls back to the global defaults in
-  // lib/pricing.ts when omitted.
-  printSizes?: PrintSizeOverride[];
+  featured: boolean;
+  original_for_sale: boolean;
+  wide: boolean;
+  print_sizes: PrintSizeOverride[] | null;
+  sort_order: number;
 }
 
-export const paintings: Painting[] = [
-  {
-    id: "the-upper-plains",
-    title: "The Upper Plains",
-    image: "/paintings/The_Upper_Plains.jpg",
-    medium: "Ink on paper",
-    size: "20.9 × 23 cm",
-    year: "2026",
-    price: 500,
-    available: true,
-    printSizes: [
-      { id: "a4", label: "Large", dims: "29.6 × 32.5 cm", price: 20 },
-      { id: "a5", label: "Small", dims: "20.9 × 23 cm", price: 10 },
-    ],
-  },
-  {
-    id: "dead-sea",
-    title: "Dead Sea",
-    image: "/paintings/Dead_Sea.jpg",
-    medium: "Ink on paper",
-    size: "29.7 x 42 cm",
-    year: "2026",
-    price: 1200,
-    available: true,
-    printSizes: [
-      { id: "a4", label: "A4", dims: "21 × 29.7 cm", price: 20 },
-      { id: "a3", label: "A3", dims: "29.7 × 42 cm", price: 35 },
-    ],
-  },
-  {
-    id: "items-ii",
-    title: "ITEMS II",
-    image: "/paintings/ITEMS-II.jpg",
-    medium: "Ink on paper",
-    size: "21 × 29.7 cm",
-    year: "2026",
-    price: 700,
-    available: true,
-    featured: true,
-  },
-  {
-    id: "lost-sanctuary",
-    title: "Lost Sanctuary",
-    image: "/paintings/Lost_sanctuary.jpg",
-    medium: "Ink on paper",
-    size: "21 × 29.7 cm",
-    year: "2026",
-    price: 750,
-    available: true,
-  },
-  {
-    id: "requiem",
-    title: "Requiem",
-    image: "/paintings/Requiem.jpg",
-    medium: "Ink on paper",
-    size: "14.7 × 14.7 cm",
-    year: "2026",
-    price: 400,
-    available: true,
-    printSizes: [
-      { id: "large", label: "Large", dims: "20.8 × 20.8 cm", price: 20 },
-      { id: "small", label: "Small", dims: "14.7 × 14.7 cm", price: 10 },
-    ],
-  },
-  {
-    id: "immortality",
-    title: "Immortality",
-    image: "/paintings/Immortality.jpg",
-    medium: "Ink on paper",
-    size: "21 × 29.7 cm",
-    year: "2026",
-    price: 800,
-    available: true,
-  },
-  {
-    id: "kingdom",
-    title: "Kingdom",
-    image: "/paintings/Kingdom.jpg",
-    medium: "Ink on paper",
-    size: "21 × 29.7 cm",
-    year: "2026",
-    price: 700,
-    available: true,
-  },
-  {
-    id: "items",
-    title: "ITEMS I",
-    image: "/paintings/ITEMS.jpg",
-    medium: "Ink on paper",
-    size: "21 × 29.7 cm",
-    year: "2026",
-    price: 700,
-    available: true,
-  },
-  {
-    id: "killers-of-the-southern-oracle",
-    title: "Killers of the Southern Oracle",
-    image: "/paintings/killers_of_the_southern_oracle.jpg",
-    medium: "Ink on paper",
-    size: "21 × 29.7 cm",
-    year: "2026",
-    price: 500,
-    available: true,
-    featured: true,
-  },
-  {
-    id: "whatever-happened-to-the-dragonmaker",
-    title: "Whatever happened to the Dragonmaker?",
-    image: "/paintings/wtv-happened-to-dragonmaker.jpg",
-    medium: "Ink on paper",
-    size: "21 × 29.7 cm",
-    year: "2026",
-    price: 650,
-    available: true,
-  },
-  {
-    id: "hymn-for-the-mother-of-tears",
-    title: "Hymn for the Mother of Tears",
-    image: "/paintings/hymn_for_the_mother_of_tears.jpg",
-    medium: "Ink on paper",
-    size: "21 × 29.7 cm",
-    year: "2025",
-    price: 500,
-    available: true,
-  },
-  {
-    id: "VESSELS",
-    title: "Vessels II",
-    image: "/paintings/VESSELS.jpg",
-    medium: "Ink on paper",
-    size: "21 × 29.7 cm",
-    year: "2025",
-    price: 650,
-    available: true,
-  },
-  {
-    id: "grave-of-mensis",
-    title: "Grave of Mensis",
-    image: "/paintings/grave_of_mensis.jpg",
-    medium: "Ink on paper",
-    size: "50 × 70 cm",
-    year: "2024",
-    price: 710,
-    available: true,
-    featured: true,
-    originalForSale: false,
-  },
-  {
-    id: "the_witch_of_Rothwood",
-    title: "The witch of Rothwood",
-    image: "/paintings/The_witch_of_Rothwood.jpg",
-    medium: "Ink on paper",
-    size: "48 × 65 cm",
-    year: "2025",
-    price: 780,
-    available: true,
-    originalForSale: false,
-  },
-  {
-    id: "vessels",
-    title: "Vessels I",
-    image: "/paintings/VESSELS_1.jpg",
-    medium: "Ink on paper",
-    size: "21 × 29.7 cm",
-    year: "2025",
-    price: 650,
-    available: true,
-  },
-  {
-    id: "forbidden_cave",
-    title: "Forbidden cave",
-    image: "/paintings/Forbidden_cave.jpg",
-    medium: "Ink on paper",
-    size: "48 × 65 cm",
-    year: "2025",
-    price: 780,
-    available: true,
-    originalForSale: false,
-  },
-  {
-    id: "i-shall-remain",
-    title: "I Shall Remain",
-    image: "/paintings/I_shall_remain.jpg",
-    medium: "Ink on paper",
-    size: "48 × 65 cm",
-    year: "2025",
-    price: 780,
-    available: true,
-    originalForSale: false,
-  },
-];
-
-export function getPaintingById(id: string): Painting | undefined {
-  return paintings.find((p) => p.id === id);
+function toPainting(row: PaintingRow): Painting {
+  return {
+    id: row.id,
+    title: row.title,
+    image: row.image,
+    medium: row.medium,
+    size: row.size,
+    year: row.year,
+    // Postgres numeric comes back as a string from the API.
+    price: Number(row.price),
+    available: row.available,
+    featured: row.featured,
+    originalForSale: row.original_for_sale,
+    wide: row.wide,
+    printSizes:
+      row.print_sizes && row.print_sizes.length > 0
+        ? row.print_sizes.map((s) => ({ ...s, price: Number(s.price) }))
+        : undefined,
+  };
 }
 
-export function getAllPaintingIds(): string[] {
-  return paintings.map((p) => p.id);
+// cache() dedupes identical calls within a single request (e.g. a page and
+// its generateStaticParams/metadata both asking for the same list), so the
+// database is hit once per render, not once per caller.
+export const getAllPaintings = cache(async function getAllPaintings(): Promise<Painting[]> {
+  const { data, error } = await getSupabaseAdmin()
+    .from("paintings")
+    .select("*")
+    .order("sort_order", { ascending: true })
+    .order("created_at", { ascending: true });
+
+  if (error) throw new Error(`Couldn't load paintings: ${error.message}`);
+  return (data as PaintingRow[]).map(toPainting);
+});
+
+export const getPaintingById = cache(async function getPaintingById(
+  id: string,
+): Promise<Painting | undefined> {
+  const { data, error } = await getSupabaseAdmin()
+    .from("paintings")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (error) throw new Error(`Couldn't load painting "${id}": ${error.message}`);
+  return data ? toPainting(data as PaintingRow) : undefined;
+});
+
+export async function getAllPaintingIds(): Promise<string[]> {
+  return (await getAllPaintings()).map((p) => p.id);
 }
 
-export function getFeaturedPaintings(): Painting[] {
-  return paintings.filter((p) => p.featured);
+export async function getFeaturedPaintings(): Promise<Painting[]> {
+  return (await getAllPaintings()).filter((p) => p.featured);
 }
 
-// Derives a width/height ratio from the physical size we already print on
-// the plaque (e.g. "20.9 × 23 cm" or "29.7 x 42 cm"), so <Image> can be
-// given accurate intrinsic dimensions for a piece without needing to open
-// the actual file. Used only as a layout/aspect-ratio hint — the browser
-// still renders each image at its own real dimensions once it loads, so a
-// slightly-off guess here never crops or distorts anything on screen.
-const FALLBACK_RATIO = 0.8;
-
-export function getPaintingAspectRatio(
-  painting: Pick<Painting, "size">,
-): number {
-  const match = painting.size?.match(
-    /(\d+(?:\.\d+)?)\s*[×x]\s*(\d+(?:\.\d+)?)/i,
-  );
-  if (!match) return FALLBACK_RATIO;
-  const width = parseFloat(match[1]);
-  const height = parseFloat(match[2]);
-  if (!width || !height) return FALLBACK_RATIO;
-  return width / height;
-}
-
-export function getOriginalsForSale(): Painting[] {
-  return paintings.filter((p) => p.originalForSale !== false);
+export async function getOriginalsForSale(): Promise<Painting[]> {
+  return (await getAllPaintings()).filter((p) => p.originalForSale !== false);
 }

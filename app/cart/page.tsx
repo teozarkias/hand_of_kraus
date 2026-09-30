@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/lib/CartContext";
-import { resolveCartItem } from "@/lib/cart-pricing";
 import { SHIPPING_ZONES, type ShippingZoneId } from "@/lib/shipping-zones";
+import { resolveCart, type ResolvedCartRow } from "./actions";
 import styles from "./page.module.css";
 
 export default function CartPage() {
@@ -13,13 +13,36 @@ export default function CartPage() {
   const [zoneId, setZoneId] = useState<ShippingZoneId | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // null = still looking the items up on the server.
+  const [resolvedRows, setResolvedRows] = useState<ResolvedCartRow[] | null>(null);
 
-  const rows = items
-    .map((item, index) => {
-      const resolved = resolveCartItem(item);
-      return resolved ? { ...resolved, index } : null;
-    })
-    .filter((r): r is NonNullable<typeof r> => r !== null);
+  // Titles, prices and images come from the database now, so they're
+  // fetched from the server whenever the cart contents change.
+  useEffect(
+    function lookUpCartItems() {
+      let cancelled = false;
+      if (items.length === 0) {
+        setResolvedRows([]);
+        return;
+      }
+      resolveCart(items)
+        .then(function handleRows(result) {
+          if (!cancelled) setResolvedRows(result);
+        })
+        .catch(function handleError() {
+          if (!cancelled) {
+            setResolvedRows([]);
+            setError("Couldn't load your cart — please refresh the page.");
+          }
+        });
+      return () => {
+        cancelled = true;
+      };
+    },
+    [items],
+  );
+
+  const rows = resolvedRows ?? [];
 
   const itemsTotal = rows.reduce((sum, r) => sum + r.price, 0);
   const selectedZone = SHIPPING_ZONES.find((z) => z.id === zoneId);
@@ -47,6 +70,13 @@ export default function CartPage() {
       setError(err instanceof Error ? err.message : "Something went wrong.");
       setLoading(false);
     }
+  }
+
+  // Brief moment while the server looks the items up — show nothing rather
+  // than flashing the "Nothing here yet" empty state at someone who does
+  // have things in their cart.
+  if (items.length > 0 && resolvedRows === null) {
+    return <section className={styles.cart} aria-busy="true" />;
   }
 
   if (rows.length === 0) {

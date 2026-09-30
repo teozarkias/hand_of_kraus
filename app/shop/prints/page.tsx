@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { paintings, getPaintingAspectRatio } from "@/lib/paintings";
+import { getAllPaintings, getPaintingAspectRatio } from "@/lib/paintings";
 import PreloadGate from "@/components/PreloadGate";
 import styles from "./page.module.css";
 
@@ -9,7 +9,14 @@ import styles from "./page.module.css";
 // this page feel like it hung on load.
 const PRELOAD_COUNT = 4;
 
-export default function PrintsShopPage() {
+// Cached, then refreshed instantly whenever something is saved in /admin
+// (see revalidateSite in app/admin/actions.ts). The 5-minute revalidate is
+// just a safety net in case an on-demand refresh is ever missed.
+export const revalidate = 300;
+
+export default async function PrintsShopPage() {
+  const paintings = await getAllPaintings();
+
   return (
     <PreloadGate images={paintings.slice(0, PRELOAD_COUNT).map((p) => p.image)}>
       <div className={styles.topBar}>
@@ -23,7 +30,7 @@ export default function PrintsShopPage() {
           <Link
             key={painting.id}
             href={`/shop/prints/${painting.id}`}
-            className={`${styles.piece} ${painting.id === "dead-sea" ? styles.pieceWide : ""}`}
+            className={`${styles.piece} ${painting.wide ? styles.pieceWide : ""}`}
             style={{ animationDelay: `${Math.min(index * 0.05, 0.4)}s` }}
           >
             <div className={styles.imgWrap}>
